@@ -17,6 +17,7 @@ jobs:
             HostName $SSH_HOST
             User $SSH_USER
             IdentityFile ~/.ssh/server.key
+            StrictHostKeyChecking no
           END
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
@@ -25,7 +26,7 @@ jobs:
 
 
       - name: Fetching new version
-        run: ssh server 'ls .'
+        run: ssh server 'cd ..'
         # run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
       
       # - name: Copy secrets
