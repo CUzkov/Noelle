@@ -10,13 +10,13 @@ jobs:
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/docs-hub.key
-          chmod 600 ~/.ssh/docs-hub.key
+          echo "$SSH_KEY" > ~/.ssh/server.key
+          chmod 600 ~/.ssh/server.key
           cat >>~/.ssh/config <<END
-          Host docs-hub
+          Host server
             HostName $SSH_HOST
             User $SSH_USER
-            IdentityFile ~/.ssh/docs-hub.key
+            IdentityFile ~/.ssh/server.key
             StrictHostKeyChecking no
           END
         env:
@@ -25,16 +25,16 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Fetching new version
-        run: ssh docs-hub 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
+        run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
       
       - name: Copy secrets
-        run: ssh docs-hub 'cd ./noelle && cp ./secrets/discord-bot/config.json ./Noelle/discord-bot/config.json'
+        run: ssh server 'cd ./noelle && cp ./secrets/discord-bot/config.json ./Noelle/discord-bot/config.json'
 
       - name: Rebuild discord-bot
-        run: ssh docs-hub 'cd ./noelle/Noelle && sudo docker-compose build discord-bot'
+        run: ssh server 'cd ./noelle/Noelle && sudo docker-compose build discord-bot'
 
       - name: Replace containers
-        run: ssh docs-hub 'cd ./noelle/Noelle && sudo docker-compose up -d'
+        run: ssh server 'cd ./noelle/Noelle && sudo docker-compose up -d'
 
       - name: Clear unused images & containers
-        run: ssh docs-hub 'cd ./noelle/Noelle && sudo docker system prune -f'
+        run: ssh server 'cd ./noelle/Noelle && sudo docker system prune -f'
