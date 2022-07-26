@@ -28,14 +28,14 @@ jobs:
         run: ssh server 'ls'
         # run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
       
-      - name: Copy secrets
-        run: ssh server 'cd ./noelle && cp ./secrets/discord-bot/config.json ./Noelle/discord-bot/config.json'
+      # - name: Copy secrets
+      #   run: ssh server 'cd ./noelle && cp ./secrets/discord-bot/config.json ./Noelle/discord-bot/config.json'
 
-      - name: Rebuild discord-bot
-        run: ssh server 'cd ./noelle/Noelle && sudo docker-compose build discord-bot'
+      # - name: Rebuild discord-bot
+      #   run: ssh server 'cd ./noelle/Noelle && sudo docker-compose build discord-bot'
 
-      - name: Replace containers
-        run: ssh server 'cd ./noelle/Noelle && sudo docker-compose up -d'
+      # - name: Replace containers
+      #   run: ssh server 'cd ./noelle/Noelle && sudo docker-compose up -d'
 
-      - name: Clear unused images & containers
-        run: ssh server 'cd ./noelle/Noelle && sudo docker system prune -f'
+      # - name: Clear unused images & containers
+      #   run: ssh server 'cd ./noelle/Noelle && sudo docker system prune -f'
