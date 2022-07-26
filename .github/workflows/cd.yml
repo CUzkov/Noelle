@@ -26,7 +26,7 @@ jobs:
 
 
       - name: Fetching new version
-        run: ssh $SSH_USER@$SSH_HOST -o StrictHostKeyChecking=no -i ~/.ssh/server.key 'ls'
+        run: ssh cuzkov@51.250.51.49 -o StrictHostKeyChecking=no -i ~/.ssh/server.key 'ls'
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
