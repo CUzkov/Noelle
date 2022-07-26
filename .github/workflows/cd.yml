@@ -24,6 +24,7 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
+
       - name: Fetching new version
         run: ssh server 'cd ..'
         # run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
