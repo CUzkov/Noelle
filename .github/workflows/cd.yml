@@ -26,7 +26,11 @@ jobs:
 
 
       - name: Fetching new version
-        run: ssh server 'cd ..'
+        run: ssh $SSH_USER@$SSH_HOST 'ls'
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
         # run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
       
       # - name: Copy secrets
