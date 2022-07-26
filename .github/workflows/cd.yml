@@ -30,7 +30,7 @@ jobs:
       
       # - name: Copy secrets
       #   run: ssh server 'cd ./noelle && cp ./secrets/discord-bot/config.json ./Noelle/discord-bot/config.json'
- 
+
       # - name: Rebuild discord-bot
       #   run: ssh server 'cd ./noelle/Noelle && sudo docker-compose build discord-bot'
 
