@@ -24,13 +24,8 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
-
       - name: Fetching new version
-        run: ssh cuzkov@51.250.51.49 -o StrictHostKeyChecking=no -i ~/.ssh/server.key 'ls'
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: ssh server 'ls'
         # run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
       
       # - name: Copy secrets
