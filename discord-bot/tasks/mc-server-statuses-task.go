@@ -88,7 +88,7 @@ func mcServerStatusesTask() {
 				continue
 			}
 
-			_, err = bot.Client.ChannelMessageSend(config.Config.DiscordStatusChannelId, "status online")
+			_, err = bot.Client.ChannelMessageSend(config.Config.DiscordStatusChannelId, "status")
 
 			if err != nil {
 				logger.ErrorLog.Println(err.Error())
