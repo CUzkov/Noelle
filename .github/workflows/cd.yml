@@ -26,8 +26,8 @@ jobs:
 
 
       - name: Fetching new version
-        run: ssh server 'ls .'
-        # run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
+        # run: ssh server 'ls .'
+        run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
       
       # - name: Copy secrets
       #   run: ssh server 'cd ./noelle && cp ./secrets/discord-bot/config.json ./Noelle/discord-bot/config.json'
