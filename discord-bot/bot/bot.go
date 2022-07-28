@@ -7,7 +7,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var Client *discordgo.Session
+var Session *discordgo.Session
 
 func Start() {
 
@@ -17,7 +17,7 @@ func Start() {
 		logger.ErrorLog.Fatalln(err.Error())
 	}
 
-	Client = bot
+	Session = bot
 
-	logger.InfoLog.Println("bot is running!")
+	logger.InfoLog.Println("bot is running")
 }

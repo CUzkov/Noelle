@@ -10,18 +10,21 @@ import (
 )
 
 func YandexCloudServerInstanceInfo() (*compute.Instance, error) {
+	instanceId := config.Config.YandexCloudServerInstaceId
+	oAuthToken := config.Config.YandexCloudToken
+
 	ctx := context.Background()
 	
 	sdk, err := ycsdk.Build(ctx, ycsdk.Config{
-		Credentials: ycsdk.OAuthToken(config.Config.YandexCloudToken),
+		Credentials: ycsdk.OAuthToken(oAuthToken),
 	})
 
 	if err != nil {
-		logger.ErrorLog.Fatalln(err.Error())
+		logger.ErrorLog.Fatalln(err)
 	}
 
 	instance, err := sdk.Compute().Instance().Get(ctx, &compute.GetInstanceRequest{
-		InstanceId: config.Config.YandexCloudServerInstaceId,
+		InstanceId: instanceId,
 		View: 0,
 	})
 
@@ -30,4 +33,26 @@ func YandexCloudServerInstanceInfo() (*compute.Instance, error) {
 	}
 
 	return instance, nil
+}
+
+func StartYandexCloudServerInstance() (error) {
+	instanceId := config.Config.YandexCloudServerInstaceId
+	oAuthToken := config.Config.YandexCloudToken
+
+	ctx := context.Background()
+	
+	sdk, err := ycsdk.Build(ctx, ycsdk.Config{
+		Credentials: ycsdk.OAuthToken(oAuthToken),
+	})
+
+	if err != nil {
+		logger.ErrorLog.Println(err)
+		return err
+	}
+
+	sdk.Compute().Instance().Start(ctx, &compute.StartInstanceRequest{
+		InstanceId: instanceId,
+	})
+	
+	return nil
 }

@@ -36,7 +36,7 @@ func ycServerStatusTask() {
 			continue
 		}
 
-		_, err = bot.Client.ChannelEditComplex(config.Config.DiscordStatusChannelId, &discordgo.ChannelEdit{
+		_, err = bot.Session.ChannelEditComplex(config.Config.DiscordStatusChannelId, &discordgo.ChannelEdit{
 			Topic: map_instance_status_to_message[instance.Status],
 		})
 

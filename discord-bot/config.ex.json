@@ -2,7 +2,7 @@
     /** discord token **/
     "DiscordToken": "",
     /** discord-app id **/
-    "DiscordClientId": "",
+    "DiscordSessionId": "",
     /** discord status channel id **/
     "DiscordStatusChannelId": "",
 

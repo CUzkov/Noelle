@@ -18,7 +18,7 @@ type minacraftServerConfig struct {
 
 type configStruct struct {
 	DiscordToken               string
-	DiscordClientId            string
+	DiscordSessionId           string
 	DiscordStatusChannelId     string
 	YandexCloudToken           string
 	YandexCloudServerInstaceId string
