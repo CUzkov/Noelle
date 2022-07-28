@@ -10,10 +10,16 @@ var (
 	Config *configStruct
 )
 
-type minacraftServerConfig struct {
-	Ip   string
+type MCServerConfig struct {
 	Port int
 	Name string
+	SSHUsername string
+}
+
+type YCServerConfig struct {
+	YandexCloudServerInstaceId string
+	Ip   string
+	MinecraftServers           []MCServerConfig
 }
 
 type configStruct struct {
@@ -21,8 +27,7 @@ type configStruct struct {
 	DiscordSessionId           string
 	DiscordStatusChannelId     string
 	YandexCloudToken           string
-	YandexCloudServerInstaceId string
-	MinecraftServers           []minacraftServerConfig
+	YCServers				   []YCServerConfig
 }
 
 func ReadConfig() {

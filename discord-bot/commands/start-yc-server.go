@@ -10,13 +10,24 @@ import (
 type commandInfo struct {
 	fn   func(session *discordgo.Session, interaction *discordgo.InteractionCreate)
 	name string
+	description string
+	options []*discordgo.ApplicationCommandOption
 }
 
-const START_YC_SERVER = "/start-yc-server"
+const START_YC_SERVER = "/start-yc-server-sad"
 
 var startYCServerCommandInfo = commandInfo{
 	fn: func(session *discordgo.Session, interaction *discordgo.InteractionCreate) {
-		instance, err := utils.YandexCloudServerInstanceInfo()
+		options := interaction.ApplicationCommandData().Options
+
+		// fmt.Println(options[0].Name)
+
+		if len(options) < 1 || options[0].Name != "id" {
+			utils.RespondSlashCommand("id is requared", session, interaction)
+			return
+		}
+
+		instance, err := utils.YandexCloudServerInstanceInfo("")
 
 		if err != nil {
 			utils.RespondSlashCommand("error the yc server status", session, interaction)
@@ -28,7 +39,7 @@ var startYCServerCommandInfo = commandInfo{
 			return
 		}
 
-		err = utils.StartYandexCloudServerInstance()
+		err = utils.StartYandexCloudServerInstance("")
 
 		if err != nil {
 			utils.RespondSlashCommand("error starting yc server", session, interaction)
@@ -38,4 +49,14 @@ var startYCServerCommandInfo = commandInfo{
 		utils.RespondSlashCommand("server starting, check status in \"status\" channel", session, interaction)
 	},
 	name: START_YC_SERVER,
+	description: "start yc server (only yc, not a minecraft)",
+	options: []*discordgo.ApplicationCommandOption{
+		{
+			Type: discordgo.ApplicationCommandOptionString,
+			Name: "id",
+			Description: "yc server id can be found in \"status\" channel",
+			Required: true,
+			Autocomplete: true,
+		},
+	},
 }

@@ -2,10 +2,10 @@ package main
 
 import (
 	"discord-bot/bot"
-	"discord-bot/commands"
+	// "discord-bot/commands"
 	"discord-bot/config"
 	"discord-bot/logger"
-	"discord-bot/tasks"
+	statuschannel "discord-bot/status-channel"
 	"os"
 	"os/signal"
 )
@@ -13,8 +13,9 @@ import (
 func main() {
 	config.ReadConfig()
 	bot.Start()
-	tasks.StartTasks()
-	commands.StartHandleAllCommands()
+	// commands.StartHandleAllCommands()
+
+	go statuschannel.StartStatusChannelUpdate()
 
 	err := bot.Session.Open()
 

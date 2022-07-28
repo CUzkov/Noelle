@@ -2,21 +2,25 @@
     /** discord token **/
     "DiscordToken": "",
     /** discord-app id **/
-    "DiscordSessionId": "",
+    "DiscordClientId": "",
     /** discord status channel id **/
     "DiscordStatusChannelId": "",
 
     /** yandex-cloud token **/
     "YandexCloudToken": "",
-    /** yandex-cloud minecraft server instance id **/
-    "YandexCloudServerInstaceId": "",
 
-    /** yminecraft servers data **/
-    "MinecraftServers": [
+    "YCServers": [
         {
-            "Ip": "",
-            "Port": 0,
-            "Name": ""
+            /** yandex-cloud minecraft server instance id **/
+            "YandexCloudServerInstaceId": "",
+            /** minecraft servers data **/
+            "MinecraftServers": [
+                {
+                    "Ip": "",
+                    "Port": 0,
+                    "Name": ""
+                }
+            ]
         }
     ]
 }

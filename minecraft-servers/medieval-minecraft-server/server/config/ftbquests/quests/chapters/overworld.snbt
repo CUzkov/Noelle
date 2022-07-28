@@ -1,0 +1,444 @@
+{
+	id: "0F48E783626E8882"
+	group: ""
+	order_index: 0
+	filename: "overworld"
+	title: "The Overworld"
+	icon: "minecraft:grass_block"
+	default_quest_shape: ""
+	default_hide_dependency_lines: false
+	quests: [
+		{
+			x: -4.0d
+			y: 0.0d
+			id: "4D6BAED11E40D71A"
+			tasks: [{
+				id: "015840E17B47EC63"
+				type: "dimension"
+				title: "Welcome to Medieval Minecraft [FABRIC]"
+				icon: "minecraft:grass_block"
+				dimension: "minecraft:overworld"
+			}]
+			rewards: [
+				{
+					id: "3220E224D3362939"
+					type: "item"
+					item: {
+						id: "minecraft:written_book"
+						Count: 1b
+						tag: {
+							pages: ["{\"text\":\"Welcome to Medieval Minecraft [FABRIC]. \\nThe Quests will guide you on the bosses you can defeat in the different Dimensions.\\nThe est is up to you to Explore and Experience this wonderfull NEW world full of AMAZING Mods!\"}"]
+							filtered_title: "MMC"
+							title: "MMC"
+							display: {
+								Name: "{\"text\":\"Medieval Minecraft [FABRIC]\"}"
+							}
+							author: "SharkieLPS"
+							RepairCost: 0
+						}
+					}
+				}
+				{
+					id: "1E8C1BF3C54B3EE0"
+					type: "item"
+					item: "bewitchment:book_of_shadows"
+				}
+				{
+					id: "72555F7DA9F61C73"
+					type: "item"
+					item: "adventurez:handbook"
+				}
+				{
+					id: "5E7BD7F0D040517F"
+					type: "item"
+					item: "archon:grimoire"
+				}
+			]
+		}
+		{
+			x: 8.0d
+			y: 0.0d
+			dependencies: ["4D6BAED11E40D71A"]
+			id: "63D82D9074FC34E3"
+			tasks: [{
+				id: "727F7A1D307E65A9"
+				type: "kill"
+				title: "Defeat the Night Lich"
+				icon: "bosses_of_mass_destruction:ancient_anima"
+				entity: "bosses_of_mass_destruction:lich"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "37B03BE444D6331F"
+					type: "item"
+					item: "bosses_of_mass_destruction:mob_ward"
+				}
+				{
+					id: "7C048ADB6DF63093"
+					type: "item"
+					item: "bosses_of_mass_destruction:void_lily"
+				}
+				{
+					id: "780F82E67B338DAE"
+					type: "xp"
+					xp: 100
+				}
+			]
+		}
+		{
+			x: 9.5d
+			y: 0.0d
+			dependencies: ["63D82D9074FC34E3"]
+			id: "24969D5FC76CDBB3"
+			tasks: [{
+				id: "3DB51E789F4F929F"
+				type: "kill"
+				title: "Defeat the Void Blossom"
+				icon: "bosses_of_mass_destruction:void_thorn"
+				entity: "bosses_of_mass_destruction:void_blossom"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "68DFBB0E19E00038"
+					type: "item"
+					item: {
+						id: "bosses_of_mass_destruction:earthdive_spear"
+						Count: 1b
+						tag: {
+							Damage: 0
+						}
+					}
+				}
+				{
+					id: "2894E9EFC59F34EC"
+					type: "xp"
+					xp: 100
+				}
+				{
+					id: "2FFD48DDB0939A9A"
+					type: "item"
+					item: "minecraft:totem_of_undying"
+				}
+			]
+		}
+		{
+			x: -1.0d
+			y: 0.0d
+			optional: true
+			id: "1C7E9580565509D2"
+			tasks: [{
+				id: "01C2EFC344021C4C"
+				type: "kill"
+				title: "Kill a Mammoth"
+				icon: "adventurez:mammoth_tusk"
+				entity: "adventurez:mammoth"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "4A671F0B31B3D879"
+					type: "item"
+					item: {
+						id: "naturescompass:naturescompass"
+						Count: 1b
+						tag: { }
+					}
+				}
+				{
+					id: "5D8CAB197FEBE30B"
+					type: "xp"
+					xp: 100
+				}
+			]
+		}
+		{
+			x: 0.5d
+			y: 0.0d
+			optional: true
+			id: "2D3BD496319AD33C"
+			tasks: [{
+				id: "64CB4ECC614E2DC9"
+				type: "kill"
+				title: "Kill a Amethyst Golem"
+				icon: "minecraft:amethyst_cluster"
+				entity: "adventurez:amethyst_golem"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "36B0C4D1E8F9B68F"
+					type: "item"
+					item: "infusion_table:infusion_table"
+				}
+				{
+					id: "0A4CD9FA9613B1C7"
+					type: "xp"
+					xp: 100
+				}
+			]
+		}
+		{
+			x: 2.0d
+			y: 0.0d
+			optional: true
+			id: "128D2885B2B4AE7E"
+			tasks: [{
+				id: "1841F40D9B6D5AD6"
+				type: "kill"
+				title: "Kill a Desert Rhino"
+				icon: "adventurez:rhino_leather"
+				entity: "adventurez:desert_rhino"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "42B413E3F36C4CAD"
+					type: "item"
+					item: "adorn:trading_station"
+				}
+				{
+					id: "490C949EC0C17014"
+					type: "item"
+					item: "tradingpost:trading_post"
+				}
+				{
+					id: "21F8E1ABEB4E9B4D"
+					type: "xp"
+					xp: 100
+				}
+			]
+		}
+		{
+			x: 3.5d
+			y: 0.0d
+			optional: true
+			id: "7D6D7B7DD55F344D"
+			tasks: [{
+				id: "354A89017B6C62D7"
+				type: "kill"
+				title: "Kill a Summoner"
+				icon: "minecraft:skeleton_skull"
+				entity: "adventurez:summoner"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "481650A6A644AE81"
+					type: "xp"
+					xp: 100
+				}
+				{
+					id: "04CC2FFE9CA10AA3"
+					type: "item"
+					item: "archon:summoning_pedestal"
+				}
+			]
+		}
+		{
+			x: 5.0d
+			y: 0.0d
+			description: ["Check the Grimoire from the Archon Mod for more Information"]
+			optional: true
+			id: "74AFEC7266C2EB4B"
+			tasks: [{
+				id: "3D59CFDFAC4FE062"
+				type: "kill"
+				title: "Summon and Kill Ayla"
+				icon: "archon:angelic_star"
+				entity: "archon:ayla"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "6644BB12DC8279E5"
+					type: "item"
+					item: {
+						id: "archon:heat_ranger"
+						Count: 1b
+						tag: {
+							Damage: 0
+						}
+					}
+				}
+				{
+					id: "25B2DD505A1F4085"
+					type: "xp"
+					xp: 100
+				}
+			]
+		}
+		{
+			x: 6.5d
+			y: 0.0d
+			description: ["Check the Grimoire from the Archon Mod for more Information"]
+			optional: true
+			id: "07E3267E019380D9"
+			tasks: [{
+				id: "018AD2867C49F837"
+				type: "kill"
+				title: "Summon and Kill Tar"
+				icon: "archon:terranite_stone"
+				entity: "archon:tar"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "12DC1073F66D3A0A"
+					type: "item"
+					item: {
+						id: "archon:soul_scythe"
+						Count: 1b
+						tag: {
+							Damage: 0
+						}
+					}
+				}
+				{
+					id: "7E72CDF82AEF5385"
+					type: "xp"
+					xp: 100
+				}
+			]
+		}
+		{
+			x: -1.0d
+			y: 1.5d
+			id: "79E0B6FA628D02E0"
+			tasks: [{
+				id: "770A2015CA927C85"
+				type: "item"
+				item: "bewitchment:book_of_shadows"
+			}]
+		}
+		{
+			x: 0.5d
+			y: 1.5d
+			id: "48B7753F178E8B98"
+			tasks: [{
+				id: "73DB0F0E633B71DC"
+				type: "kill"
+				title: "Kill a Demon"
+				icon: "bewitchment:demon_heart"
+				entity: "bewitchment:demon"
+				value: 1L
+			}]
+			rewards: [{
+				id: "6D714299A5DABCC6"
+				type: "xp"
+				xp: 1000
+			}]
+		}
+		{
+			x: 3.5d
+			y: 1.5d
+			id: "06F68A7AF4C03524"
+			tasks: [{
+				id: "654E4AAE49D53B2A"
+				type: "kill"
+				title: "Kill a Baphomet"
+				icon: "bewitchment:demon_heart"
+				entity: "bewitchment:baphomet"
+				value: 1L
+			}]
+			rewards: [{
+				id: "3A506DBEA6CC5371"
+				type: "xp"
+				xp: 1000
+			}]
+		}
+		{
+			x: 5.0d
+			y: 1.5d
+			id: "2807C094857B8A91"
+			tasks: [{
+				id: "7F5279B4634C50A5"
+				type: "kill"
+				title: "Kill a Lilith"
+				icon: "bewitchment:demon_heart"
+				entity: "bewitchment:lilith"
+				value: 1L
+			}]
+			rewards: [{
+				id: "519128DB5C690CCA"
+				type: "xp"
+				xp: 1000
+			}]
+		}
+		{
+			x: 6.5d
+			y: 1.5d
+			dependencies: ["79E0B6FA628D02E0"]
+			id: "4A763DA6B96789BC"
+			tasks: [{
+				id: "4194434FB9904BCD"
+				type: "kill"
+				title: "Kill a Herne"
+				icon: "bewitchment:demon_heart"
+				entity: "bewitchment:herne"
+				value: 1L
+			}]
+			rewards: [{
+				id: "5AF89E608C74D4F7"
+				type: "xp"
+				xp: 1000
+			}]
+		}
+		{
+			x: 2.0d
+			y: 1.5d
+			id: "5B60E2F23ABB67B4"
+			tasks: [{
+				id: "36B04C139BE46322"
+				type: "kill"
+				title: "Kill a Beelzebub"
+				icon: "bewitchment:demon_heart"
+				entity: "besmirchment:beelzebub"
+				value: 1L
+			}]
+			rewards: [{
+				id: "27416D698D31F0DF"
+				type: "xp"
+				xp: 1000
+			}]
+		}
+		{
+			x: -2.5d
+			y: 0.0d
+			id: "668F2294E7893BD9"
+			tasks: [{
+				id: "724E11F55E7B0A6E"
+				type: "kill"
+				title: "Kill a Shaman"
+				icon: {
+					id: "minecraft:trident"
+					Count: 1b
+					tag: {
+						Damage: 0
+					}
+				}
+				entity: "adventurez:shaman"
+				value: 1L
+			}]
+			rewards: [
+				{
+					id: "29A921871D2BB680"
+					type: "item"
+					item: {
+						id: "minecraft:trident"
+						Count: 1b
+						tag: {
+							Damage: 0
+						}
+					}
+				}
+				{
+					id: "274A2FB248C303A9"
+					type: "xp"
+					xp: 100
+				}
+			]
+		}
+	]
+}

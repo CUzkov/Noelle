@@ -17,13 +17,19 @@ func StartHandleAllCommands() {
 
 	for _, command := range commands {
 		bot.Session.AddHandler(command.fn)
-		bot.Session.ApplicationCommandCreate(appId, "", &discordgo.ApplicationCommand{
+		
+		_, err := bot.Session.ApplicationCommandCreate(appId, "", &discordgo.ApplicationCommand{
 			Name:          command.name,
 			ID:            command.name,
-			Description:   "start yc server (only yc, not a minecraft)",
+			Description:   command.description,
 			ApplicationID: appId,
 			Type:          discordgo.ChatApplicationCommand,
+			Options: 	   command.options,
 		})
+
+		if err != nil {
+			logger.ErrorLog.Fatalln(err)
+		}
 	}
 
 	logger.InfoLog.Println("all commands handle")

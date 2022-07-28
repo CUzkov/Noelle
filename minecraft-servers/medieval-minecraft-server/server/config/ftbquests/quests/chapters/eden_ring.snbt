@@ -1,0 +1,34 @@
+{
+	id: "17CACD65CDB7AF54"
+	group: ""
+	order_index: 3
+	filename: "eden_ring"
+	title: "Eden Ring"
+	icon: "minecraft:copper_block"
+	default_quest_shape: ""
+	default_hide_dependency_lines: false
+	quests: [{
+		x: -0.5d
+		y: -0.5d
+		id: "756A4727CEB3E68C"
+		tasks: [{
+			id: "2B2EB624435FCD5D"
+			type: "dimension"
+			title: "Enter Eden Ring"
+			icon: "minecraft:copper_block"
+			dimension: "edenring:edenring"
+		}]
+		rewards: [
+			{
+				id: "6C9054F93C2AE253"
+				type: "item"
+				item: "edenring:guide_book"
+			}
+			{
+				id: "686CFFE7C3406222"
+				type: "xp"
+				xp: 100
+			}
+		]
+	}]
+}
