@@ -27,7 +27,7 @@ var mapInstanceStatusToMessage = map[compute.Instance_Status]string{
 	compute.Instance_STATUS_UNSPECIFIED: "🔴 GG",
 }
 
-func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceId string, serverIp string, isServerInstanceStop bool) ([]*discordgo.MessageSend, error) {
+func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceId string, serverIp string, isServerInstanceRunning bool) ([]*discordgo.MessageSend, error) {
 	statusMessageFields := []*discordgo.MessageEmbedField{}
 	mcButtons := []discordgo.MessageComponent{}
 
@@ -71,7 +71,7 @@ func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceId string, s
 			Name:         server.Name,
 			Status:       statusForComponent,
 			YCInstanceId: ycInstanceId,
-		}, isServerInstanceStop))
+		}, isServerInstanceRunning))
 	}
 
 	return []*discordgo.MessageSend{
@@ -150,13 +150,11 @@ func getMessagesMap() ([]*discordgo.MessageSend, error) {
 			return nil, err
 		}
 
-		messages = append(messages, ycStatusMessage...)
-
 		mcStatusMessage, err := getMCStatusMessage(
 			&ycServer.MinecraftServers,
 			ycServer.YandexCloudServerInstaceId,
 			ycServer.Ip,
-			status == compute.Instance_STOPPED,
+			status == compute.Instance_RUNNING,
 		)
 
 		if err != nil {
@@ -164,6 +162,7 @@ func getMessagesMap() ([]*discordgo.MessageSend, error) {
 		}
 
 		messages = append(messages, mcStatusMessage...)
+		messages = append(messages, ycStatusMessage...)
 	}
 
 	return messages, nil
