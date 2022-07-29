@@ -29,8 +29,7 @@ jobs:
         run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
       
       - name: Copy secrets
-        run: ssh server 'cp ./secrets/discord-bot/config.json ./noelle/Noelle/discord-bot/config.json'
-        run: ssh server 'cp ./secrets/discord-bot/.ssh/minecraft-server ./noelle/Noelle/discord-bot/minecraft-server-key'
+        run: ssh server 'cp ./secrets/discord-bot/config.json ./noelle/Noelle/discord-bot/config.json && cp ./secrets/discord-bot/.ssh/minecraft-server ./noelle/Noelle/discord-bot/minecraft-server-key'
 
       - name: Rebuild discord-bot
         run: ssh server 'cd ./noelle/Noelle && sudo docker-compose build discord-bot'
