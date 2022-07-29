@@ -13,21 +13,22 @@ var (
 type MCServerConfig struct {
 	Port int
 	Name string
-	SSHUsername string
 }
 
 type YCServerConfig struct {
 	YandexCloudServerInstaceId string
-	Ip   string
+	Ip                         string
+	Login                      string
+	PathToPublicKey            string
 	MinecraftServers           []MCServerConfig
 }
 
 type configStruct struct {
-	DiscordToken               string
-	DiscordSessionId           string
-	DiscordStatusChannelId     string
-	YandexCloudToken           string
-	YCServers				   []YCServerConfig
+	DiscordToken           string
+	DiscordClientId        string
+	DiscordStatusChannelId string
+	YandexCloudToken       string
+	YCServers              []YCServerConfig
 }
 
 func ReadConfig() {

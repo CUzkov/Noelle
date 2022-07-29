@@ -8,23 +8,43 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-func StartHandleAllCommands() {
-	appId := config.Config.DiscordSessionId
+type commandInfo struct {
+	fn          func(session *discordgo.Session, interaction *discordgo.InteractionCreate)
+	name        string
+	description string
+	options     []*discordgo.ApplicationCommandOption
+}
 
-	commands := []commandInfo{
-		startYCServerCommandInfo,
+func StartHandleAllCommands() {
+	appId := config.Config.DiscordClientId
+
+	commmandsForDelete, err := bot.Session.ApplicationCommands(appId, "")
+
+	if err != nil {
+		logger.ErrorLog.Fatalln(err)
 	}
+
+	for _, command := range commmandsForDelete {
+		err := bot.Session.ApplicationCommandDelete(appId, "", command.ID)
+
+		if err != nil {
+			logger.ErrorLog.Fatalln(err)
+		}
+	}
+
+	commands := []commandInfo{}
+
+	bot.Session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged
 
 	for _, command := range commands {
 		bot.Session.AddHandler(command.fn)
-		
+
 		_, err := bot.Session.ApplicationCommandCreate(appId, "", &discordgo.ApplicationCommand{
 			Name:          command.name,
-			ID:            command.name,
 			Description:   command.description,
 			ApplicationID: appId,
 			Type:          discordgo.ChatApplicationCommand,
-			Options: 	   command.options,
+			Options:       command.options,
 		})
 
 		if err != nil {

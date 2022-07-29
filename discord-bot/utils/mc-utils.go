@@ -11,9 +11,9 @@ import (
 // https://github.com/FragLand/minestat/blob/master/Go/minestat/minestat.go
 
 type minecraftServerStatus struct {
-	Online          bool
-	Latency         time.Duration
-	Version         string
+	Online         bool
+	Latency        time.Duration
+	Version        string
 	CurrentPlayers string
 	MaxPlayers     string
 }
@@ -25,9 +25,9 @@ const RESPONSE_NUM_FIELDS int = 6
 
 func MCServerStatus(address string, port int) minecraftServerStatus {
 	result := minecraftServerStatus{
-		Online:          false,
-		Latency:         -1,
-		Version:         "",
+		Online:         false,
+		Latency:        -1,
+		Version:        "",
 		CurrentPlayers: "",
 		MaxPlayers:     "",
 	}

@@ -2,7 +2,8 @@ package main
 
 import (
 	"discord-bot/bot"
-	// "discord-bot/commands"
+	"discord-bot/commands"
+	"discord-bot/components"
 	"discord-bot/config"
 	"discord-bot/logger"
 	statuschannel "discord-bot/status-channel"
@@ -13,15 +14,17 @@ import (
 func main() {
 	config.ReadConfig()
 	bot.Start()
-	// commands.StartHandleAllCommands()
-
-	go statuschannel.StartStatusChannelUpdate()
 
 	err := bot.Session.Open()
 
 	if err != nil {
 		logger.ErrorLog.Fatalln(err)
 	}
+
+	commands.StartHandleAllCommands()
+	components.StartHandleAllComponents()
+
+	go statuschannel.StartStatusChannelUpdate()
 
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, os.Interrupt)

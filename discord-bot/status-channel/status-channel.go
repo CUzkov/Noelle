@@ -2,6 +2,7 @@ package statuschannel
 
 import (
 	"discord-bot/bot"
+	"discord-bot/components"
 	"discord-bot/config"
 	"discord-bot/logger"
 	"discord-bot/utils"
@@ -26,7 +27,7 @@ var mapInstanceStatusToMessage = map[compute.Instance_Status]string{
 	compute.Instance_STATUS_UNSPECIFIED: "🔴 GG",
 }
 
-func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceName string, serverIp string) (*discordgo.MessageEmbed, error) {
+func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceName string, serverIp string) (*discordgo.MessageSend, error) {
 	statusMessageFields := []*discordgo.MessageEmbedField{}
 
 	for _, server := range *servers {
@@ -63,46 +64,65 @@ func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceName string,
 		})
 	}
 
-	return &discordgo.MessageEmbed{
-		Title: "Minecraft server statuses for " + ycInstanceName + " yc server",
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "https://storage.yandexcloud.net/noelle/server-icon.png",
+	return &discordgo.MessageSend{
+		Embeds: []*discordgo.MessageEmbed{
+			{
+				Title: "Minecraft server statuses for " + ycInstanceName + " yc server",
+				Thumbnail: &discordgo.MessageEmbedThumbnail{
+					URL: "https://storage.yandexcloud.net/noelle/server-icon.png",
+				},
+				Fields:    statusMessageFields,
+				Timestamp: time.Now().Format(time.RFC3339),
+			},
 		},
-		Fields:    statusMessageFields,
-		Timestamp: time.Now().Format(time.RFC3339),
 	}, nil
 }
 
-func getYCStatusMessage(server *config.YCServerConfig) (*discordgo.MessageEmbed, error) {
-	instance, err := utils.YandexCloudServerInstanceInfo(server.YandexCloudServerInstaceId)
+func getYCStatusMessage(server *config.YCServerConfig) ([]*discordgo.MessageSend, error) {
+	instance, err := utils.YCInstanceInfo(server.YandexCloudServerInstaceId)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &discordgo.MessageEmbed{
-		Title: "YC server status for " + server.YandexCloudServerInstaceId + " yc server",
-		Thumbnail: &discordgo.MessageEmbedThumbnail{
-			URL: "https://storage.yandexcloud.net/noelle/server-icon.png",
-		},
-		Fields: []*discordgo.MessageEmbedField{
-			{
-				Name:  "Status",
-				Value: mapInstanceStatusToMessage[instance.Status],
-				Inline: true,
+	return []*discordgo.MessageSend{
+		{
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title: "YC server status for " + server.YandexCloudServerInstaceId + " yc server",
+					Thumbnail: &discordgo.MessageEmbedThumbnail{
+						URL: "https://storage.yandexcloud.net/noelle/server-icon.png",
+					},
+					Fields: []*discordgo.MessageEmbedField{
+						{
+							Name:   "Status",
+							Value:  mapInstanceStatusToMessage[instance.Status],
+							Inline: true,
+						},
+						{
+							Name:   "ID",
+							Value:  server.YandexCloudServerInstaceId,
+							Inline: true,
+						},
+					},
+					Timestamp: time.Now().Format(time.RFC3339),
+				},
 			},
-			{
-				Name:  "ID",
-				Value: server.YandexCloudServerInstaceId,
-				Inline: true,
+		},
+		{
+			Components: []discordgo.MessageComponent{
+				discordgo.ActionsRow{
+					Components: []discordgo.MessageComponent{
+						components.GetYCInstanceButton(instance.Id, instance.Status),
+					},
+				},
 			},
 		},
-		Timestamp: time.Now().Format(time.RFC3339),
 	}, nil
 }
 
-func getMessagesMap() ([]*discordgo.MessageEmbed, error) {
-	messages := []*discordgo.MessageEmbed{}
+func getMessagesMap() ([]*discordgo.MessageSend, error) {
+	messages := []*discordgo.MessageSend{}
 
 	for _, ycServer := range config.Config.YCServers {
 		mcStatusMessage, err := getMCStatusMessage(&ycServer.MinecraftServers, ycServer.YandexCloudServerInstaceId, ycServer.Ip)
@@ -119,7 +139,7 @@ func getMessagesMap() ([]*discordgo.MessageEmbed, error) {
 			return nil, err
 		}
 
-		messages = append(messages, ycStatusMessage)
+		messages = append(messages, ycStatusMessage...)
 	}
 
 	return messages, nil
@@ -158,7 +178,7 @@ func StartStatusChannelUpdate() {
 			}
 
 			for _, message := range messages {
-				_, err = bot.Session.ChannelMessageSendEmbed(config.Config.DiscordStatusChannelId, message)
+				_, err = bot.Session.ChannelMessageSendComplex(config.Config.DiscordStatusChannelId, message)
 
 				if err != nil {
 					logger.ErrorLog.Println(err.Error())
@@ -166,7 +186,13 @@ func StartStatusChannelUpdate() {
 			}
 		} else {
 			for index, message := range messages {
-				_, err := bot.Session.ChannelMessageEditEmbed(config.Config.DiscordStatusChannelId, statusChannelMessages[len(messages)-index-1].ID, message)
+				_, err := bot.Session.ChannelMessageEditComplex(&discordgo.MessageEdit{
+					ID:         statusChannelMessages[len(messages)-index-1].ID,
+					Components: message.Components,
+					Embeds:     message.Embeds,
+					Embed:      message.Embed,
+					Channel:    config.Config.DiscordStatusChannelId,
+				})
 
 				if err != nil {
 					logger.ErrorLog.Println(err.Error())
