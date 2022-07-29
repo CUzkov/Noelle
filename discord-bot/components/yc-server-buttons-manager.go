@@ -68,7 +68,7 @@ func GetYCInstanceButton(instanceId string, status compute.Instance_Status) *dis
 	}
 }
 
-func startYCServerCommandInfo(session *discordgo.Session, interaction *discordgo.InteractionCreate) {
+func startYCInstanceComponentsHandling(session *discordgo.Session, interaction *discordgo.InteractionCreate) {
 	if interaction.Type != discordgo.InteractionMessageComponent {
 		return
 	}

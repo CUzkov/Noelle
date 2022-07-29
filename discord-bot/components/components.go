@@ -9,7 +9,8 @@ import (
 
 func StartHandleAllComponents() {
 	commands := []func(session *discordgo.Session, interaction *discordgo.InteractionCreate){
-		startYCServerCommandInfo,
+		startYCInstanceComponentsHandling,
+		startMCServerComponentsHandling,
 	}
 
 	bot.Session.Identify.Intents = discordgo.IntentsAllWithoutPrivileged

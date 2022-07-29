@@ -11,15 +11,16 @@ var (
 )
 
 type MCServerConfig struct {
-	Port int
-	Name string
+	Port         int
+	Name         string
+	StartCommand string
 }
 
 type YCServerConfig struct {
 	YandexCloudServerInstaceId string
 	Ip                         string
 	Login                      string
-	PathToPublicKey            string
+	PathToPrivateKey           string
 	MinecraftServers           []MCServerConfig
 }
 

@@ -2,26 +2,36 @@ package utils
 
 import (
 	"discord-bot/config"
+	"discord-bot/logger"
 
-	"golang.org/x/crypto/ssh"
+	"github.com/melbahja/goph"
 )
 
-func SendSSHCommand(command string, serverConfig config.YCServerConfig) error {
-	var hostKey ssh.PublicKey
+func SendSSHCommand(command string, serverConfig *config.YCServerConfig) error {
+	auth, err := goph.Key(serverConfig.PathToPrivateKey, "")
 
-	config := &ssh.ClientConfig{
-		User: "username",
-		Auth: []ssh.AuthMethod{
-			ssh.Password(""),
-		},
-		HostKeyCallback: ssh.FixedHostKey(hostKey),
-	}
-
-	client, err := ssh.Dial("tcp", "yourserver.com:22", config)
 	if err != nil {
+		logger.ErrorLog.Println(err)
 		return err
 	}
+
+	client, err := goph.New(serverConfig.Login, serverConfig.Ip, auth)
+
+	if err != nil {
+		logger.ErrorLog.Println(err)
+		return err
+	}
+
 	defer client.Close()
+
+	_, err = client.Run(command)
+
+	if err != nil {
+		logger.ErrorLog.Println(err)
+		return err
+	}
+
+	// fmt.Println(string(out))
 
 	return nil
 }

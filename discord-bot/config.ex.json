@@ -13,12 +13,16 @@
         {
             /** yandex-cloud minecraft server instance id **/
             "YandexCloudServerInstaceId": "",
+            "Login": "",
+            "PathToPrivateKey": "",
+            "Ip": "",
+
             /** minecraft servers data **/
             "MinecraftServers": [
                 {
-                    "Ip": "",
                     "Port": 0,
-                    "Name": ""
+                    "Name": "",
+                    "StartCommand": ""
                 }
             ]
         }

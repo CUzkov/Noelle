@@ -27,23 +27,27 @@ var mapInstanceStatusToMessage = map[compute.Instance_Status]string{
 	compute.Instance_STATUS_UNSPECIFIED: "🔴 GG",
 }
 
-func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceName string, serverIp string) (*discordgo.MessageSend, error) {
+func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceId string, serverIp string) ([]*discordgo.MessageSend, error) {
 	statusMessageFields := []*discordgo.MessageEmbedField{}
+	mcButtons := []discordgo.MessageComponent{}
 
 	for _, server := range *servers {
 		status := utils.MCServerStatus(serverIp, server.Port)
 
 		var (
-			online  string
-			players string
+			online             string
+			players            string
+			statusForComponent = components.SERVER_INTERMEDIATE
 		)
 
 		if status.Online {
 			online = "online"
 			players = utils.ClearString(status.CurrentPlayers + " / " + status.MaxPlayers)
+			statusForComponent = components.SERVER_RUNNING
 		} else {
 			online = "offline"
 			players = "- / -"
+			statusForComponent = components.SERVER_STOP
 		}
 
 		statusMessageFields = append(statusMessageFields, &discordgo.MessageEmbedField{
@@ -62,17 +66,32 @@ func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceName string,
 			Value:  serverIp + ":" + strconv.Itoa(server.Port),
 			Inline: true,
 		})
+
+		mcButtons = append(mcButtons, components.GetMCServerButton(&components.McServerInfo{
+			Name:         server.Name,
+			Status:       statusForComponent,
+			YCInstanceId: ycInstanceId,
+		}))
 	}
 
-	return &discordgo.MessageSend{
-		Embeds: []*discordgo.MessageEmbed{
-			{
-				Title: "Minecraft server statuses for " + ycInstanceName + " yc server",
-				Thumbnail: &discordgo.MessageEmbedThumbnail{
-					URL: "https://storage.yandexcloud.net/noelle/server-icon.png",
+	return []*discordgo.MessageSend{
+		{
+			Embeds: []*discordgo.MessageEmbed{
+				{
+					Title: "Minecraft server statuses for " + ycInstanceId + " yc server",
+					Thumbnail: &discordgo.MessageEmbedThumbnail{
+						URL: "https://storage.yandexcloud.net/noelle/server-icon.png",
+					},
+					Fields:    statusMessageFields,
+					Timestamp: time.Now().Format(time.RFC3339),
 				},
-				Fields:    statusMessageFields,
-				Timestamp: time.Now().Format(time.RFC3339),
+			},
+		},
+		{
+			Components: []discordgo.MessageComponent{
+				discordgo.ActionsRow{
+					Components: mcButtons,
+				},
 			},
 		},
 	}, nil
@@ -131,7 +150,7 @@ func getMessagesMap() ([]*discordgo.MessageSend, error) {
 			return nil, err
 		}
 
-		messages = append(messages, mcStatusMessage)
+		messages = append(messages, mcStatusMessage...)
 
 		ycStatusMessage, err := getYCStatusMessage(&ycServer)
 

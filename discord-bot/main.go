@@ -7,8 +7,9 @@ import (
 	"discord-bot/config"
 	"discord-bot/logger"
 	statuschannel "discord-bot/status-channel"
-	"os"
-	"os/signal"
+	// "os"
+	// "os/signal"
+	"time"
 )
 
 func main() {
@@ -26,11 +27,15 @@ func main() {
 
 	go statuschannel.StartStatusChannelUpdate()
 
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, os.Interrupt)
-	<-stop
+	for {
+		time.Sleep(30 * time.Second)
+	}
 
-	bot.Session.Close()
+	// stop := make(chan os.Signal, 1)
+	// signal.Notify(stop, os.Interrupt)
+	// <-stop
 
-	logger.InfoLog.Println("gracefully shutting down")
+	// bot.Session.Close()
+
+	// logger.InfoLog.Println("gracefully shutting down")
 }
