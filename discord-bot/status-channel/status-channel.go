@@ -27,7 +27,7 @@ var mapInstanceStatusToMessage = map[compute.Instance_Status]string{
 	compute.Instance_STATUS_UNSPECIFIED: "🔴 GG",
 }
 
-func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceId string, serverIp string) ([]*discordgo.MessageSend, error) {
+func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceId string, serverIp string, isServerInstanceStop bool) ([]*discordgo.MessageSend, error) {
 	statusMessageFields := []*discordgo.MessageEmbedField{}
 	mcButtons := []discordgo.MessageComponent{}
 
@@ -71,7 +71,7 @@ func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceId string, s
 			Name:         server.Name,
 			Status:       statusForComponent,
 			YCInstanceId: ycInstanceId,
-		}))
+		}, isServerInstanceStop))
 	}
 
 	return []*discordgo.MessageSend{
@@ -97,11 +97,11 @@ func getMCStatusMessage(servers *[]config.MCServerConfig, ycInstanceId string, s
 	}, nil
 }
 
-func getYCStatusMessage(server *config.YCServerConfig) ([]*discordgo.MessageSend, error) {
+func getYCStatusMessage(server *config.YCServerConfig) ([]*discordgo.MessageSend, compute.Instance_Status, error) {
 	instance, err := utils.YCInstanceInfo(server.YandexCloudServerInstaceId)
 
 	if err != nil {
-		return nil, err
+		return nil, compute.Instance_STOPPED, err
 	}
 
 	return []*discordgo.MessageSend{
@@ -137,28 +137,33 @@ func getYCStatusMessage(server *config.YCServerConfig) ([]*discordgo.MessageSend
 				},
 			},
 		},
-	}, nil
+	}, instance.Status, nil
 }
 
 func getMessagesMap() ([]*discordgo.MessageSend, error) {
 	messages := []*discordgo.MessageSend{}
 
 	for _, ycServer := range config.Config.YCServers {
-		mcStatusMessage, err := getMCStatusMessage(&ycServer.MinecraftServers, ycServer.YandexCloudServerInstaceId, ycServer.Ip)
-
-		if err != nil {
-			return nil, err
-		}
-
-		messages = append(messages, mcStatusMessage...)
-
-		ycStatusMessage, err := getYCStatusMessage(&ycServer)
+		ycStatusMessage, status, err := getYCStatusMessage(&ycServer)
 
 		if err != nil {
 			return nil, err
 		}
 
 		messages = append(messages, ycStatusMessage...)
+
+		mcStatusMessage, err := getMCStatusMessage(
+			&ycServer.MinecraftServers,
+			ycServer.YandexCloudServerInstaceId,
+			ycServer.Ip,
+			status == compute.Instance_STOPPED,
+		)
+
+		if err != nil {
+			return nil, err
+		}
+
+		messages = append(messages, mcStatusMessage...)
 	}
 
 	return messages, nil

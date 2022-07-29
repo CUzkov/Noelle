@@ -45,7 +45,7 @@ func isCustomIdForMCServer(customId string, prefix string) bool {
 	return strings.HasPrefix(customId, prefix)
 }
 
-func GetMCServerButton(serverInfo *McServerInfo) *discordgo.Button {
+func GetMCServerButton(serverInfo *McServerInfo, isServerInstanceStop bool) *discordgo.Button {
 	status := serverInfo.Status
 	timeToPrint := ""
 
@@ -55,6 +55,15 @@ func GetMCServerButton(serverInfo *McServerInfo) *discordgo.Button {
 		timeToPrint = ". TTReap " + strconv.Itoa(int(duration.Seconds())) + " с"
 	} else {
 		lastStatus = serverInfo.Status
+	}
+
+	if isServerInstanceStop {
+		return &discordgo.Button{
+			Label:    "для запуска запустите yc сервер",
+			CustomID: getMCCustomIdFromServerInfo(serverInfo, ""),
+			Style:    discordgo.PrimaryButton,
+			Disabled: true,
+		}
 	}
 
 	if status == SERVER_RUNNING {
@@ -150,7 +159,7 @@ func startMCServerComponentsHandling(session *discordgo.Session, interaction *di
 				Components: []discordgo.MessageComponent{
 					discordgo.ActionsRow{
 						Components: []discordgo.MessageComponent{
-							GetMCServerButton(serverInfo),
+							GetMCServerButton(serverInfo, false),
 						},
 					},
 				},
