@@ -15,7 +15,7 @@ func SendSSHCommand(command string, serverConfig *config.YCServerConfig) error {
 		return err
 	}
 
-	client, err := goph.New(serverConfig.Login, serverConfig.Ip, auth)
+	client, err := goph.NewUnknown(serverConfig.Login, serverConfig.Ip, auth)
 
 	if err != nil {
 		logger.ErrorLog.Println(err)
