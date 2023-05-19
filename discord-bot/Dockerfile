@@ -1,4 +1,4 @@
-FROM golang:1.18.4
+FROM node:12
 
 RUN mkdir /app 
 ADD ./discord-bot /app/ 
