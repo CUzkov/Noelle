@@ -1,0 +1,32 @@
+{
+    "name": "noelle",
+    "version": "1.0.0",
+    "description": "",
+    "main": " ",
+    "scripts": {
+        "precommit": "prettier --write ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CUzkov/Noelle.git"
+    },
+    "author": "CUzkov",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/CUzkov/Noelle/issues"
+    },
+    "homepage": "https://github.com/CUzkov/Noelle#readme",
+    "dependencies": {
+        "axios": "^1.4.0",
+        "discord.js": "^14.11.0",
+        "got": "^11.8.2",
+        "log4js": "^6.9.1",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.0.4"
+    },
+    "devDependencies": {
+        "eslint": "^8.40.0",
+        "prettier": "2.8.8",
+        "tsconfig-paths": "^4.2.0"
+    }
+}
