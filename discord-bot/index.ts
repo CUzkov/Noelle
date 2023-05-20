@@ -1,4 +1,4 @@
-import {logger, getConfig, wait} from 'lib';
+import {logger, getSecret, wait, Secrets} from 'lib';
 
 process.on('unhandledRejection', async (reason) => {
     logger.error(reason);
@@ -15,7 +15,7 @@ process.on('uncaughtException', async (err) => {
 });
 
 (async () => {
-    const config = await getConfig();
+    const config = await getSecret(Secrets.mcServerConfig);
 
     console.log(config);
 })();

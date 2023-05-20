@@ -1,19 +1,35 @@
-export class TimeCach {
-    private cach: Record<string, {settedTime: number; duration: number; value: string}> = {};
+type TimeCachTech<T> = {
+    [Key in keyof T]: {settedTime: number; duration: number};
+};
 
-    valueStatus(key: string) {
+export class TimeCach<Config extends {[Key in keyof Config]: Config[Key]}> {
+    private cach: Config;
+    private techInfo: TimeCachTech<Config>;
+
+    constructor(initialConfig: Config) {
+        this.cach = initialConfig;
+
+        this.techInfo = (Object.keys(initialConfig) as Array<keyof Config>).reduce((acc, curr) => {
+            acc[curr] = {settedTime: 0, duration: 0};
+            return acc;
+        }, {} as Record<keyof Config, {settedTime: number; duration: number}>);
+    }
+
+    valueStatus<T extends keyof Config>(key: T) {
         const isExpired =
-            Boolean(this.cach[key]) && new Date().getTime() - this.cach[key].settedTime > this.cach[key].duration;
+            Boolean(this.cach[key]) &&
+            new Date().getTime() - this.techInfo[key].settedTime > this.techInfo[key].duration;
 
         return {isExpired};
     }
 
-    set(key: string, value: string, duration: number) {
-        this.cach[key] = {value, duration, settedTime: new Date().getTime()};
+    set<T extends keyof Config>(key: T, value: Config[T], duration: number) {
+        this.techInfo[key] = {duration, settedTime: new Date().getTime()};
+        this.cach[key] = value;
     }
 
-    get(key: string) {
+    get<T extends keyof Config>(key: T): Config[T] | undefined {
         const {isExpired} = this.valueStatus(key);
-        return isExpired ? '' : this.cach[key]?.value ?? '';
+        return isExpired ? undefined : this.cach[key];
     }
 }
