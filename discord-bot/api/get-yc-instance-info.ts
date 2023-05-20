@@ -32,7 +32,7 @@ type GetYcInstanceInfoResponse = {
     status: YcInstanceStatus;
 };
 
-export const getYcInstanceInfoUrl = async (instanceId: string) =>
+export const getYcInstanceInfo = async (instanceId: string) =>
     await got
         .get(getGetYcInstanceInfoUrl(instanceId), {
             headers: {

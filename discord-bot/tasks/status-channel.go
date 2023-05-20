@@ -110,26 +110,3 @@ func getMessagesMap() ([]*discordgo.MessageSend, error) {
 
 	return messages, nil
 }
-
-func StartStatusChannelUpdate() {
-	for {
-
-		if len(statusChannelMessages) != len(messages) {
-
-		} else {
-			for index, message := range messages {
-				_, err := bot.Session.ChannelMessageEditComplex(&discordgo.MessageEdit{
-					ID:         statusChannelMessages[len(messages)-index-1].ID,
-					Components: message.Components,
-					Embeds:     message.Embeds,
-					Embed:      message.Embed,
-					Channel:    config.Config.DiscordStatusChannelId,
-				})
-
-				if err != nil {
-					logger.ErrorLog.Println(err.Error())
-				}
-			}
-		}
-	}
-}

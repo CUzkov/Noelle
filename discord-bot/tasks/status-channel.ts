@@ -1,6 +1,6 @@
 import {Client} from 'discord.js';
 
-import {getYcInstanceInfoUrl} from 'api';
+import {getYcInstanceInfo} from 'api';
 import {Secrets, getSecret, logger, wait} from 'lib';
 import {getYCInstanceComponent} from 'components';
 import {editMessagesComponents, sendComponents, Components} from 'lib/components';
@@ -14,8 +14,8 @@ export const startUpdateStatusChannel = async (client: Client) => {
         const components: Components[] = [];
 
         const messagesPromises = ycInstanceConfig.map(async ({instanceId}) => {
-            const {status} = await getYcInstanceInfoUrl(instanceId);
-            components.push(...getYCInstanceComponent({instanceId, status}));
+            const {status, name} = await getYcInstanceInfo(instanceId);
+            components.push(...getYCInstanceComponent({instanceId, status, instanceName: name}));
         });
 
         const newMessages = await Promise.all(messagesPromises);

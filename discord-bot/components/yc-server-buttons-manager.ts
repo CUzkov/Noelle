@@ -71,11 +71,12 @@ const getYcInstanceControlButton = ({status, instanceId}: GetYCInstanceControlBu
 type GetYCInstanceComponent = {
     status: YcInstanceStatus;
     instanceId: string;
+    instanceName: string;
 };
 
-export const getYCInstanceComponent = ({status, instanceId}: GetYCInstanceComponent) => {
+export const getYCInstanceComponent = ({status, instanceId, instanceName}: GetYCInstanceComponent) => {
     const embedYcInstance = new EmbedBuilder()
-        .setTitle(`YC server status for ${name} yc server`)
+        .setTitle(`YC server status for ${instanceName} yc server`)
         .setThumbnail('https://storage.yandexcloud.net/noelle/server-icon.png')
         .setFields([
             {
