@@ -85,8 +85,8 @@ export const getYCInstanceComponent = ({status, instanceId, instanceName}: GetYC
                 inline: true,
             },
             {
-                name: 'Status',
-                value: mapYcInstanceStatusToText[status],
+                name: 'ID',
+                value: instanceId,
                 inline: true,
             },
         ])

@@ -21,7 +21,8 @@ export const startYcInstance = async (instanceId: string) =>
             timeout: 10_000,
         })
         .json<StartYcInstanceResponse>()
-        .catch(async () => {
+        .catch(async (e) => {
             logger.fatal('Instance starts request was failed');
+            logger.fatal(e);
             process.exit();
         });

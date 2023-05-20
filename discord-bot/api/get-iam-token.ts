@@ -27,7 +27,8 @@ export const getIamToken = async () =>
             logger.info('IAM token was successfully received');
             return res;
         })
-        .catch(async () => {
+        .catch(async (e) => {
             logger.fatal('IAM token receive was failed');
+            logger.fatal(e);
             process.exit();
         });

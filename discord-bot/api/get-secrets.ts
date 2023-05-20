@@ -28,7 +28,8 @@ export const getSecrets = async () =>
             logger.info('Config secret was successfully received');
             return res;
         })
-        .catch(async () => {
+        .catch(async (e) => {
             logger.fatal('Config secret receive was failed');
+            logger.fatal(e);
             process.exit();
         });
