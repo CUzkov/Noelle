@@ -7,4 +7,4 @@ WORKDIR /app
 RUN npm i
 RUN npm install -g ts-node
 
-CMD ["ts-node ./index.ts"]
+CMD ["ts-node", "index.ts"]
