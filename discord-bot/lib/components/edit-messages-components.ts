@@ -19,7 +19,7 @@ export const editMessagesComponents = async ({messages, components}: SendCompone
     const editPromises = [];
 
     for (let i = 0; i < messages.size; i++) {
-        const component = components[i];
+        const component = components[messages.size - i - 1];
         const message = messages.at(i);
 
         if (message && component instanceof EmbedBuilder) {
