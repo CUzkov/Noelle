@@ -51,6 +51,7 @@ export const getYcInstanceControlButton = ({status, instanceId}: GetYCInstanceCo
     if (status === YcInstanceStatus.starting) {
         return new ButtonBuilder()
             .setLabel(`сервер с id=${instanceId} запускается`)
+            .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: 'starting'}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
     }
@@ -58,12 +59,14 @@ export const getYcInstanceControlButton = ({status, instanceId}: GetYCInstanceCo
     if (status === YcInstanceStatus.stopping) {
         return new ButtonBuilder()
             .setLabel(`сервер с id=${instanceId} останавливается`)
+            .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: 'stopping'}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
     }
 
     return new ButtonBuilder()
         .setLabel(`сервер с id=${instanceId} чиллит`)
+        .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: 'chill'}))
         .setStyle(ButtonStyle.Primary)
         .setDisabled(true);
 };
