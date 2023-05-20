@@ -9,30 +9,6 @@ import (
 	ycsdk "github.com/yandex-cloud/go-sdk"
 )
 
-func YCInstanceInfo(instanceId string) (*compute.Instance, error) {
-	oAuthToken := config.Config.YandexCloudToken
-
-	ctx := context.Background()
-
-	sdk, err := ycsdk.Build(ctx, ycsdk.Config{
-		Credentials: ycsdk.OAuthToken(oAuthToken),
-	})
-
-	if err != nil {
-		logger.ErrorLog.Fatalln(err)
-	}
-
-	instance, err := sdk.Compute().Instance().Get(ctx, &compute.GetInstanceRequest{
-		InstanceId: instanceId,
-		View:       0,
-	})
-
-	if err != nil {
-		return nil, err
-	}
-
-	return instance, nil
-}
 
 func StartYCInstance(instanceId string) error {
 	oAuthToken := config.Config.YandexCloudToken

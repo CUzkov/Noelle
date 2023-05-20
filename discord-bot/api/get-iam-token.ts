@@ -1,5 +1,10 @@
 import got from 'got';
-import {logger, wait} from 'lib';
+import {logger} from 'lib';
+
+/**
+ * Описание ручки в документации
+ * https://cloud.yandex.ru/docs/compute/operations/vm-connect/auth-inside-vm
+ */
 
 const IAM_TOKEN_REFRESH_URL = 'http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token';
 
@@ -15,7 +20,7 @@ export const getIamToken = async () =>
             headers: {
                 'Metadata-Flavor': 'Google',
             },
-            timeout: 10,
+            timeout: 10_000,
         })
         .json<GetIamTokenResponse>()
         .then((res) => {
@@ -24,6 +29,5 @@ export const getIamToken = async () =>
         })
         .catch(async () => {
             logger.fatal('IAM token receive was failed');
-            await wait(1000);
             process.exit();
         });

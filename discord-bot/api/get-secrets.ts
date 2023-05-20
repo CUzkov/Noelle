@@ -1,6 +1,11 @@
 import got from 'got';
 
-import {logger, wait, Secrets} from 'lib';
+import {logger, Secrets, getIamToken} from 'lib';
+
+/**
+ * Описание ручки в документации
+ * https://cloud.yandex.ru/docs/lockbox/api-ref/Payload/get
+ */
 
 const SECRET_ID = 'e6qpitiokv639bgi5lge';
 const GET_SECRET_URL = `https://payload.lockbox.api.cloud.yandex.net/lockbox/v1/secrets/${SECRET_ID}/payload`;
@@ -10,12 +15,13 @@ type GetSecretsResponse = {
     versionId: string;
 };
 
-export const getSecrets = async ({iam}: {iam: string}) =>
+export const getSecrets = async () =>
     await got
         .get(GET_SECRET_URL, {
             headers: {
-                'Authorization': `Bearer ${iam}`,
+                'Authorization': `Bearer ${await getIamToken()}`,
             },
+            timeout: 10_000,
         })
         .json<GetSecretsResponse>()
         .then((res) => {
@@ -24,6 +30,5 @@ export const getSecrets = async ({iam}: {iam: string}) =>
         })
         .catch(async () => {
             logger.fatal('Config secret receive was failed');
-            await wait(1000);
             process.exit();
         });

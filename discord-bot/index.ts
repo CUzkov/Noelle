@@ -1,21 +1,39 @@
+import {Client, Events, GatewayIntentBits} from 'discord.js';
+
 import {logger, getSecret, wait, Secrets} from 'lib';
+import {startUpdateStatusChannel} from 'tasks';
 
 process.on('unhandledRejection', async (reason) => {
     logger.error(reason);
 
     await wait(1000);
-    process.exit(1);
+    process.exit();
 });
 
 process.on('uncaughtException', async (err) => {
     logger.error({err}, 'Uncaught Exception');
 
     await wait(1000);
-    process.exit(1);
+    process.exit();
 });
 
 (async () => {
-    const config = await getSecret(Secrets.discordStatusChannelId);
+    const discordToken = await getSecret(Secrets.discordToken);
 
-    console.log(config);
+    const client = new Client({
+        intents: [
+            GatewayIntentBits.Guilds,
+            GatewayIntentBits.GuildMessages,
+            GatewayIntentBits.GuildMessageTyping,
+            GatewayIntentBits.MessageContent,
+        ],
+    });
+
+    client.once(Events.ClientReady, (c) => {
+        logger.info(`Ready! Logged in as ${c.user.tag}`);
+    });
+
+    client.login(discordToken);
+
+    startUpdateStatusChannel(client);
 })();
