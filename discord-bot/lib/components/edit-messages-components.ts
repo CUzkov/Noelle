@@ -1,4 +1,4 @@
-import {ActionRowBuilder, EmbedBuilder} from '@discordjs/builders';
+import {ActionRowBuilder, EmbedBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
 import {Collection, Message} from 'discord.js';
 
 import {logger} from 'lib/logger';
@@ -26,7 +26,7 @@ export const editMessagesComponents = async ({messages, components}: SendCompone
             editPromises.push(await message.edit({embeds: [component]}));
         }
 
-        if (message && component instanceof ActionRowBuilder<any>) {
+        if (message && component instanceof ActionRowBuilder<MessageActionRowComponentBuilder>) {
             editPromises.push(await message.edit({components: [component]}));
         }
     }
