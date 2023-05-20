@@ -14,7 +14,7 @@ type StartYcInstanceResponse = {};
 
 export const startYcInstance = async (instanceId: string) =>
     await got
-        .get(getStartYcInstanceUrl(instanceId), {
+        .post(getStartYcInstanceUrl(instanceId), {
             headers: {
                 'Authorization': `Bearer ${await getIamToken()}`,
             },
