@@ -15,7 +15,7 @@ process.on('uncaughtException', async (err) => {
 });
 
 (async () => {
-    const config = await getSecret(Secrets.mcServerConfig);
+    const config = await getSecret(Secrets.discordStatusChannelId);
 
     console.log(config);
 })();
