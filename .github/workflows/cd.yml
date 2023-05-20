@@ -25,19 +25,13 @@ jobs:
                   SSH_HOST: ${{ secrets.SSH_HOST }}
 
             - name: Fetching new version
-              run: ssh server 'cd ./noelle && rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
-
-            - name: Copy secrets
-              run: |
-                  ssh server 'cp ./secrets/discord-bot/config.json ./noelle/Noelle/discord-bot/config.json &&
-                  cp ./secrets/discord-bot/.ssh/minecraft-server ./noelle/Noelle/discord-bot/minecraft-server-key &&
-                  cp ./secrets/discord-bot/.ssh/known_hosts ./noelle/Noelle/discord-bot/known_hosts'
+              run: ssh server 'rm ./Noelle -R -f && git clone https://github.com/CUzkov/Noelle.git'
 
             - name: Rebuild discord-bot
-              run: ssh server 'cd ./noelle/Noelle && sudo docker-compose build discord-bot'
+              run: ssh server 'cd ./Noelle && sudo docker-compose build discord-bot'
 
             - name: Replace containers
-              run: ssh server 'cd ./noelle/Noelle && sudo docker-compose up -d'
+              run: ssh server 'cd ./Noelle && sudo docker-compose up -d'
 
             - name: Clear unused images & containers
-              run: ssh server 'cd ./noelle/Noelle && sudo docker system prune -f'
+              run: ssh server 'cd ./Noelle && sudo docker system prune -f'

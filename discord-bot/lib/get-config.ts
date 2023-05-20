@@ -10,7 +10,7 @@ enum Secrets {
 }
 
 const IAM_TOKEN_REFRESH_URL = 'http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token';
-const GET_SECRET_URL = 'https://payload.lockbox.api.cloud.yandex.net/lockbox/v1/secrets/e6qvimf47bs3774rjure/payload';
+const GET_SECRET_URL = 'https://payload.lockbox.api.cloud.yandex.net/lockbox/v1/secrets/e6qrf8pqeh1f9k96573l/payload';
 const HOUR = 60 * 60 * 1_000;
 const FIVE_MINUTS = 5 * 60 * 1_000;
 
@@ -61,8 +61,6 @@ export const getConfig = async () => {
     let iam = secretsCach.get(Secrets.iam);
 
     if (!iam) {
-        console.log(1);
-
         iam = await refreshIamToken();
         secretsCach.set(Secrets.iam, iam, HOUR);
     }
