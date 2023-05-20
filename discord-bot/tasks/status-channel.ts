@@ -13,10 +13,12 @@ export const startUpdateStatusChannel = async (client: Client) => {
 
         const components: Components[] = [];
 
-        ycInstanceConfig.forEach(async ({instanceId}) => {
+        const componentsPromises = ycInstanceConfig.map(async ({instanceId}) => {
             const {status, name} = await getYcInstanceInfo(instanceId);
             components.push(...getYCInstanceComponent({instanceId, status, instanceName: name}));
         });
+
+        await Promise.all(componentsPromises);
 
         const channel = client.channels.cache.get(await getSecret(Secrets.discordStatusChannelId));
 
