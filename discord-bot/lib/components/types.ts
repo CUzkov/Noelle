@@ -1,3 +1,3 @@
-import {ActionRowBuilder, EmbedBuilder} from '@discordjs/builders';
+import {ActionRowBuilder, EmbedBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
 
-export type Components = EmbedBuilder | ActionRowBuilder<any>;
+export type Components = EmbedBuilder | ActionRowBuilder<MessageActionRowComponentBuilder>;

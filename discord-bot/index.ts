@@ -1,7 +1,7 @@
 import {Client, Events, GatewayIntentBits} from 'discord.js';
 
 import {logger, getSecret, wait, Secrets} from 'lib';
-import {startUpdateStatusChannel} from 'tasks';
+import {startUpdateStatusChannel, startHandleButtonsInteractions} from 'tasks';
 
 process.on('unhandledRejection', async (reason) => {
     logger.error(reason);
@@ -36,4 +36,5 @@ process.on('uncaughtException', async (err) => {
     client.login(discordToken);
 
     startUpdateStatusChannel(client);
+    startHandleButtonsInteractions(client);
 })();

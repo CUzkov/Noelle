@@ -1,4 +1,4 @@
-import {ActionRowBuilder, ButtonBuilder, EmbedBuilder} from '@discordjs/builders';
+import {ActionRowBuilder, ButtonBuilder, EmbedBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
 
 import {mapYcInstanceStatusToText} from 'consts';
 import {YcInstanceStatus} from 'api';
@@ -8,18 +8,18 @@ import {ButtonStyle} from 'discord.js';
 // Префиксы для команд
 // =================================================================
 
-const YC_INSTANCE_START_PREFIX = 'YC-INSTANCE-START-';
+export const YC_INSTANCE_START_PREFIX = 'YC-INSTANCE-START-';
 const YC_INSTANCE_STOP_PREFIX = 'YC-INSTANCE-STOP-';
 
 const getYCCustomIdFromInstanceId = ({instanceId, prefix}: {instanceId: string; prefix: string}): string => {
     return prefix + instanceId;
 };
 
-const getYCInstanceIdFromCustomId = ({customId, prefix}: {customId: string; prefix: string}): string => {
+export const getYCInstanceIdFromCustomId = ({customId, prefix}: {customId: string; prefix: string}): string => {
     return customId.replace(prefix, '');
 };
 
-const isCustomIdForYCInstance = ({customId, prefix}: {customId: string; prefix: string}): boolean => {
+export const isCustomIdForYCInstance = ({customId, prefix}: {customId: string; prefix: string}): boolean => {
     return customId.startsWith(prefix);
 };
 
@@ -32,7 +32,7 @@ type GetYCInstanceControlButtonParams = {
     instanceId: string;
 };
 
-const getYcInstanceControlButton = ({status, instanceId}: GetYCInstanceControlButtonParams) => {
+export const getYcInstanceControlButton = ({status, instanceId}: GetYCInstanceControlButtonParams) => {
     if (status === YcInstanceStatus.stopped) {
         return new ButtonBuilder()
             .setLabel(`запустить сервер с id=${instanceId}`)
@@ -93,7 +93,7 @@ export const getYCInstanceComponent = ({status, instanceId, instanceName}: GetYC
         .setTimestamp();
 
     const messageButton = getYcInstanceControlButton({status, instanceId});
-    const messageActionRow = new ActionRowBuilder().setComponents(messageButton);
+    const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(messageButton);
 
     return [embedYcInstance, messageActionRow];
 };
