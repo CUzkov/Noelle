@@ -27,6 +27,8 @@ export const startUpdateStatusChannel = async (client: Client) => {
 
         const channelMessages = await channel.messages.fetch({limit: 100});
 
+        console.log(channelMessages.size, components.length);
+
         if (channelMessages.size !== components.length) {
             for (let i = 0; i < channelMessages.size; i++) {
                 const message = channelMessages.at(i);
