@@ -26,7 +26,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 messageButton,
             );
 
-            interaction.editReply({
+            await interaction.editReply({
                 components: [messageActionRow],
             });
         }
