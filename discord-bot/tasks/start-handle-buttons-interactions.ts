@@ -1,6 +1,6 @@
 import {ActionRowBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
 
-import {getYcInstanceInfo, startYcInstance} from 'api';
+import {YcInstanceStatus, startYcInstance} from 'api';
 import {
     getYCInstanceIdFromCustomId,
     isCustomIdForYCInstance,
@@ -18,10 +18,9 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 customId: interaction.customId,
                 prefix: YC_INSTANCE_START_PREFIX,
             });
-            const {status} = await getYcInstanceInfo(instanceId);
             await startYcInstance(instanceId);
 
-            const messageButton = getYcInstanceControlButton({status, instanceId});
+            const messageButton = getYcInstanceControlButton({status: YcInstanceStatus.starting, instanceId});
             const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
                 messageButton,
             );
