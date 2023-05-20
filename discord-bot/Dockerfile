@@ -5,5 +5,6 @@ ADD ./discord-bot /app/
 WORKDIR /app
 
 RUN npm i
+RUN npm install -g ts-node
 
-CMD ["npm run start"]
+CMD ["ts-node ./index.ts"]
