@@ -71,9 +71,8 @@ export const getMcServerButton = ({
     if (serverStatus === McServerStatus.intermediate) {
         return new ButtonBuilder()
             .setLabel(
-                `сервер ${serverId.name} запускается` + isWaitForStarting
-                    ? `. TTReap ${timeLeftForRetry ?? -1_000 / 1000}`
-                    : '',
+                `сервер ${serverId.name} запускается` +
+                    (isWaitForStarting ? `. TTReap ${timeLeftForRetry ?? -1_000 / 1000}` : ''),
             )
             .setCustomId(getMcCustomIdFromServerId({serverId, prefix: 'server-start-runnig'}))
             .setStyle(ButtonStyle.Primary)
