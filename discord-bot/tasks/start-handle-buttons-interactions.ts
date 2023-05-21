@@ -86,7 +86,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 serverStatus: McServerStatus.intermediate,
                 ycInstanceStatus,
                 isWaitForStarting: true,
-                timeLeftForRetry: now + FOUR_MINUT,
+                timeLeftForRetry: FOUR_MINUT,
             });
             const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
                 messageButton,
