@@ -73,7 +73,6 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 command: mcStartConfig.startCommand,
                 config: {
                     host: mcStartConfig.host,
-                    port: mcStartConfig.serverPort,
                     username: mcStartConfig.login,
                 },
                 options: {
