@@ -42,7 +42,7 @@ export const getYcInstanceInfo = async (instanceId: string) =>
         })
         .json<GetYcInstanceInfoResponse>()
         .catch(async (e) => {
-            logger.fatal('Instance info receive was failed');
+            logger.fatal(`Instance info receive was failed for ${instanceId}`);
             logger.fatal(e);
             process.exit();
         });
