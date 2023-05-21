@@ -76,9 +76,6 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                     privateKey: Buffer.from(mcStartConfig.privateKey, 'base64').toString('utf-8'),
                     username: mcStartConfig.login,
                 },
-                options: {
-                    cwd: '/home/cuzkov',
-                },
             });
 
             const messageButton = getMcServerButton({
