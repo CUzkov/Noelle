@@ -1,4 +1,5 @@
 import {ActionRowBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
+import {Client, Events} from 'discord.js';
 
 import {YcInstanceStatus, startYcInstance} from 'api';
 import {
@@ -7,7 +8,7 @@ import {
     YC_INSTANCE_START_PREFIX,
     getYcInstanceControlButton,
 } from 'components/yc-server-buttons-manager';
-import {Client, Events} from 'discord.js';
+import {logger} from 'lib';
 
 export const startHandleButtonsInteractions = async (client: Client) => {
     client.on(Events.InteractionCreate, async (interaction) => {
@@ -28,6 +29,8 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             await interaction.update({
                 components: [messageActionRow],
             });
+
+            logger.info(`Server ${instanceId} starting`);
         }
     });
 };
