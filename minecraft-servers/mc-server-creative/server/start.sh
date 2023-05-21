@@ -28,4 +28,4 @@ echo "Java version:"
 $JAVA -version
 echo "Java args: $ARGS";
 
-$JAVA $OTHERARGS $ARGS -jar fabric-server-launch.jar nogui
+$JAVA $OTHERARGS $ARGS -jar server.jar nogui
