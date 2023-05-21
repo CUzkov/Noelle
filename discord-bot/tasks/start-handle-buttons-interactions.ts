@@ -77,7 +77,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                     username: mcStartConfig.login,
                 },
                 options: {
-                    cwd: '${HOME}',
+                    cwd: '/home/cuzkov',
                 },
             });
 

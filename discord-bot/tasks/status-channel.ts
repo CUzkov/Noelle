@@ -30,7 +30,7 @@ export const startUpdateStatusChannel = async (client: Client) => {
 
                 const isWaitForStarting = Boolean(mcServerSharedData?.isWaitForStarting);
                 const timeLeftForRetry = isWaitForStarting
-                    ? Math.round(new Date().getTime() - (mcServerSharedData?.lastTryTime ?? 0))
+                    ? Math.round((new Date().getTime() - (mcServerSharedData?.lastTryTime ?? 0)) / 1000)
                     : 0;
 
                 components.push(
