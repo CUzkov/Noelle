@@ -1,14 +1,14 @@
-import {NodeSSH, Config} from 'node-ssh';
+import {NodeSSH, Config, SSHExecCommandOptions} from 'node-ssh';
 
 import {logger} from './logger';
 
 type ExecSshCommandParams = {
     command: string;
-    cwd?: string;
     config: Config;
+    options?: SSHExecCommandOptions;
 };
 
-export const execSshCommand = async ({command, cwd, config}: ExecSshCommandParams) => {
+export const execSshCommand = async ({command, options, config}: ExecSshCommandParams) => {
     const ssh = new NodeSSH();
 
     await ssh.connect(config).then(
@@ -16,7 +16,7 @@ export const execSshCommand = async ({command, cwd, config}: ExecSshCommandParam
         (e) => logger.error(e),
     );
 
-    const commResult = await ssh.execCommand(command, {cwd});
+    const commResult = await ssh.execCommand(command, options);
 
     logger.info(commResult.stdout);
     logger.error(commResult.stderr);

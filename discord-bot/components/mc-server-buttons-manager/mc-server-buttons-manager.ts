@@ -45,7 +45,7 @@ type GetMCServerButtonParams = {
     timeLeftForRetry?: number;
 };
 
-const getMCServerButton = ({
+export const getMcServerButton = ({
     serverStatus,
     serverId,
     ycInstanceStatus,
@@ -145,7 +145,7 @@ export const getMcServerComponent = ({
         ])
         .setTimestamp();
 
-    const messageButton = getMCServerButton({
+    const messageButton = getMcServerButton({
         serverStatus: serverInfo.status,
         serverId: {name: serverName, ycInstanceId},
         ycInstanceStatus,
