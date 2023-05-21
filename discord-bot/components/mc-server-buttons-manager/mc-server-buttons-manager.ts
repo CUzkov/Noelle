@@ -23,7 +23,7 @@ export const getMcServerFromCustomId = ({customId, prefix}: {customId: string; p
     const splittedCustomId = customId.replace(prefix, '').split('~');
     return {
         name: splittedCustomId[0],
-        ycInstanceId: splittedCustomId[2],
+        ycInstanceId: splittedCustomId[1],
     };
 };
 
