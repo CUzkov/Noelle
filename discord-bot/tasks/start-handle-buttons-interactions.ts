@@ -69,7 +69,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            await execSshCommand({
+            execSshCommand({
                 command: mcStartConfig.startCommand,
                 config: {
                     host: mcStartConfig.host,
