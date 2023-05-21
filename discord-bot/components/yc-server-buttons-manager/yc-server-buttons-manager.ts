@@ -1,8 +1,7 @@
 import {ActionRowBuilder, ButtonBuilder, EmbedBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
-
-import {mapYcInstanceStatusToText} from 'consts';
-import {YcInstanceStatus} from 'api';
 import {ButtonStyle} from 'discord.js';
+
+import {YcInstanceStatus} from 'api';
 
 // =================================================================
 // Префиксы для команд
@@ -26,6 +25,20 @@ export const isCustomIdForYCInstance = ({customId, prefix}: {customId: string; p
 // =================================================================
 // Сборка компонента
 // =================================================================
+
+export const mapYcInstanceStatusToText: Record<YcInstanceStatus, string> = {
+    [YcInstanceStatus.crashed]: '🔴 Сервер крашнулся',
+    [YcInstanceStatus.deleting]: '🔴 Сервер удаляется',
+    [YcInstanceStatus.error]: '🔴 Сервер ошибся',
+    [YcInstanceStatus.provisioning]: '🟡 Сервер запускается',
+    [YcInstanceStatus.restarting]: '🟡 Сервер перезагружается',
+    [YcInstanceStatus.running]: '🟢 Сервер запущен',
+    [YcInstanceStatus.starting]: '🟡 Сервер запускается',
+    [YcInstanceStatus.stopped]: '🔴 Сервер остановлен',
+    [YcInstanceStatus.stopping]: '🔴 Сервер останавливается',
+    [YcInstanceStatus.updating]: '🟡 Сервер обновляется',
+    [YcInstanceStatus.statusUnspecified]: '🔴 GG',
+};
 
 type GetYCInstanceControlButtonParams = {
     status: YcInstanceStatus;

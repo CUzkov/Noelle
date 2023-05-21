@@ -1,10 +1,10 @@
 import {Client} from 'discord.js';
 
-import {getYcInstanceInfo} from 'api';
-import {Secrets, getSecret, logger, wait} from 'lib';
+import {McServerStatus, getMcServerStatus, getYcInstanceInfo} from 'api';
+import {Secrets, getMcServersSharedData, getSecret, logger, wait} from 'lib';
 import {getYCInstanceComponent} from 'components/yc-server-buttons-manager';
 import {editMessagesComponents, sendComponents, Components} from 'lib/components';
-import {McServerStatus, getMcServerComponent} from 'components/mc-server-buttons-manager';
+import {getMcServerComponent} from 'components/mc-server-buttons-manager';
 
 export const startUpdateStatusChannel = async (client: Client) => {
     while (true) {
@@ -14,18 +14,45 @@ export const startUpdateStatusChannel = async (client: Client) => {
 
         const components: Components[] = [];
 
-        const componentsPromises = ycInstanceConfig.map(async ({instanceId, name: serverName}) => {
-            const {status, name: ycInstanceName} = await getYcInstanceInfo(instanceId);
-            components.push(...getYCInstanceComponent({instanceId, status, instanceName: ycInstanceName}));
-            components.push(
-                ...getMcServerComponent({
-                    ycInstanceId: instanceId,
-                    ycInstanceStatus: status,
-                    serverName,
-                    serverStatus: McServerStatus.stop,
-                }),
-            );
-        });
+        const componentsPromises = ycInstanceConfig.map(
+            async ({instanceId: ycInstanceId, serverName, serverPort, host}) => {
+                const {status: ycInstanceStatus, name: ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
+                components.push(
+                    ...getYCInstanceComponent({
+                        instanceId: ycInstanceId,
+                        status: ycInstanceStatus,
+                        instanceName: ycInstanceName,
+                    }),
+                );
+
+                const serverInfo = await getMcServerStatus({host, serverPort});
+                const mcServerSharedData = (await getMcServersSharedData()).get(serverName);
+
+                const isWaitForStarting = Boolean(mcServerSharedData?.isWaitForStarting);
+                const timeLeftForRetry = isWaitForStarting
+                    ? Math.round(new Date().getTime() - (mcServerSharedData?.lastTryTime ?? 0))
+                    : 0;
+
+                components.push(
+                    ...getMcServerComponent({
+                        host,
+
+                        serverName,
+                        serverPort,
+                        serverInfo: {
+                            ...serverInfo,
+                            status: isWaitForStarting ? McServerStatus.intermediate : serverInfo.status,
+                        },
+
+                        ycInstanceId,
+                        ycInstanceStatus,
+
+                        isWaitForStarting,
+                        timeLeftForRetry,
+                    }),
+                );
+            },
+        );
 
         await Promise.all(componentsPromises);
 

@@ -2,5 +2,5 @@ export {
     getMcServerComponent,
     getMcServerFromCustomId,
     isCustomIdForMCServer,
-    McServerStatus,
+    MC_SERVER_START_PREFIX,
 } from './mc-server-buttons-manager';

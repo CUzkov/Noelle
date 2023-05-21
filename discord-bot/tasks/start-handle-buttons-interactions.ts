@@ -8,6 +8,11 @@ import {
     YC_INSTANCE_START_PREFIX,
     getYcInstanceControlButton,
 } from 'components/yc-server-buttons-manager';
+import {
+    getMcServerFromCustomId,
+    isCustomIdForMCServer,
+    MC_SERVER_START_PREFIX,
+} from 'components/mc-server-buttons-manager';
 import {logger} from 'lib';
 
 export const startHandleButtonsInteractions = async (client: Client) => {
@@ -31,6 +36,10 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             });
 
             logger.info(`Server ${instanceId} starting`);
+        }
+
+        if (isCustomIdForMCServer({customId: interaction.customId, prefix: MC_SERVER_START_PREFIX})) {
+            const serverId = getMcServerFromCustomId({prefix: MC_SERVER_START_PREFIX, customId: interaction.customId});
         }
     });
 };

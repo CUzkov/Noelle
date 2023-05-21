@@ -15,8 +15,10 @@ export type YcInstanceConfig = {
     login: string;
     host: string;
     privateKey: string;
+
     startCommand: string;
-    name: string;
+    serverName: string;
+    serverPort: number;
 };
 
 type Config = {

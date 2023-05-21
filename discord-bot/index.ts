@@ -1,19 +1,15 @@
 import {Client, Events, GatewayIntentBits} from 'discord.js';
 
-import {logger, getSecret, wait, Secrets} from 'lib';
+import {logger, getSecret, wait, Secrets, getMcServersSharedData} from 'lib';
 import {startUpdateStatusChannel, startHandleButtonsInteractions} from 'tasks';
 
 process.on('unhandledRejection', async (reason) => {
     logger.error(reason);
-
-    await wait(1000);
     process.exit();
 });
 
 process.on('uncaughtException', async (err) => {
     logger.error({err}, 'Uncaught Exception');
-
-    await wait(1000);
     process.exit();
 });
 
@@ -34,6 +30,8 @@ process.on('uncaughtException', async (err) => {
     });
 
     client.login(discordToken);
+
+    await getMcServersSharedData();
 
     startUpdateStatusChannel(client);
     startHandleButtonsInteractions(client);
