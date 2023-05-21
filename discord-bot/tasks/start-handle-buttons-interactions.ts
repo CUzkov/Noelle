@@ -73,6 +73,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 command: mcStartConfig.startCommand,
                 config: {
                     host: mcStartConfig.host,
+                    privateKey: Buffer.from(mcStartConfig.privateKey, 'base64').toString('utf-8'),
                     username: mcStartConfig.login,
                 },
                 options: {
