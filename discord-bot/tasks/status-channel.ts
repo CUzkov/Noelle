@@ -14,47 +14,45 @@ export const startUpdateStatusChannel = async (client: Client) => {
 
         const components: Components[] = [];
 
-        const componentsPromises = ycInstanceConfig.map(
-            async ({instanceId: ycInstanceId, serverName, serverPort, host}) => {
-                const {status: ycInstanceStatus, name: ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
-                components.push(
-                    ...getYCInstanceComponent({
-                        instanceId: ycInstanceId,
-                        status: ycInstanceStatus,
-                        instanceName: ycInstanceName,
-                    }),
-                );
+        for (let i = 0; i < ycInstanceConfig.length; i++) {
+            const {instanceId: ycInstanceId, serverName, serverPort, host} = ycInstanceConfig[i];
 
-                const serverInfo = await getMcServerStatus({host, serverPort});
-                const mcServerSharedData = (await getMcServersSharedData()).get(serverName);
+            const {status: ycInstanceStatus, name: ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
+            components.push(
+                ...getYCInstanceComponent({
+                    instanceId: ycInstanceId,
+                    status: ycInstanceStatus,
+                    instanceName: ycInstanceName,
+                }),
+            );
 
-                const isWaitForStarting = Boolean(mcServerSharedData?.isWaitForStarting);
-                const timeLeftForRetry = isWaitForStarting
-                    ? Math.round((new Date().getTime() - (mcServerSharedData?.lastTryTime ?? 0)) / 1000)
-                    : 0;
+            const serverInfo = await getMcServerStatus({host, serverPort});
+            const mcServerSharedData = (await getMcServersSharedData()).get(serverName);
 
-                components.push(
-                    ...getMcServerComponent({
-                        host,
+            const isWaitForStarting = Boolean(mcServerSharedData?.isWaitForStarting);
+            const timeLeftForRetry = isWaitForStarting
+                ? Math.round((new Date().getTime() - (mcServerSharedData?.lastTryTime ?? 0)) / 1000)
+                : 0;
 
-                        serverName,
-                        serverPort,
-                        serverInfo: {
-                            ...serverInfo,
-                            status: isWaitForStarting ? McServerStatus.intermediate : serverInfo.status,
-                        },
+            components.push(
+                ...getMcServerComponent({
+                    host,
 
-                        ycInstanceId,
-                        ycInstanceStatus,
+                    serverName,
+                    serverPort,
+                    serverInfo: {
+                        ...serverInfo,
+                        status: isWaitForStarting ? McServerStatus.intermediate : serverInfo.status,
+                    },
 
-                        isWaitForStarting,
-                        timeLeftForRetry,
-                    }),
-                );
-            },
-        );
+                    ycInstanceId,
+                    ycInstanceStatus,
 
-        await Promise.all(componentsPromises);
+                    isWaitForStarting,
+                    timeLeftForRetry,
+                }),
+            );
+        }
 
         const channel = client.channels.cache.get(await getSecret(Secrets.discordStatusChannelId));
 

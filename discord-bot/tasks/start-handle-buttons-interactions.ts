@@ -1,12 +1,13 @@
 import {ActionRowBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
 import {Client, Events} from 'discord.js';
 
-import {McServerStatus, YcInstanceStatus, getYcInstanceInfo, startYcInstance} from 'api';
+import {McServerStatus, YcInstanceStatus, getYcInstanceInfo, startYcInstance, stopYcInstance} from 'api';
 import {
     getYCInstanceIdFromCustomId,
     isCustomIdForYCInstance,
     YC_INSTANCE_START_PREFIX,
     getYcInstanceControlButton,
+    YC_INSTANCE_STOP_PREFIX,
 } from 'components/yc-server-buttons-manager';
 import {
     getMcServerFromCustomId,
@@ -39,6 +40,34 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             });
 
             logger.info(`Instance ${instanceId} starting`);
+        }
+
+        if (isCustomIdForYCInstance({customId: interaction.customId, prefix: YC_INSTANCE_STOP_PREFIX})) {
+            const instanceId = getYCInstanceIdFromCustomId({
+                customId: interaction.customId,
+                prefix: YC_INSTANCE_STOP_PREFIX,
+            });
+
+            const {status} = await getYcInstanceInfo(instanceId);
+
+            if (status !== YcInstanceStatus.running) {
+                logger.error(`Yc instance ${instanceId} not running`);
+                await interaction.update({});
+                return;
+            }
+
+            await stopYcInstance(instanceId);
+
+            const messageButton = getYcInstanceControlButton({status: YcInstanceStatus.stopping, instanceId});
+            const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
+                messageButton,
+            );
+
+            await interaction.update({
+                components: [messageActionRow],
+            });
+
+            logger.info(`Instance ${instanceId} stopping`);
         }
 
         if (isCustomIdForMCServer({customId: interaction.customId, prefix: MC_SERVER_START_PREFIX})) {

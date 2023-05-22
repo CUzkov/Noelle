@@ -72,7 +72,7 @@ export const getMcServerButton = ({
         return new ButtonBuilder()
             .setLabel(
                 `сервер ${serverId.name} запускается` +
-                    (isWaitForStarting ? `. TTReap ${(timeLeftForRetry ?? -1_000) / 1000} сек.` : ''),
+                    (isWaitForStarting ? `. TTReap ${timeLeftForRetry ?? -1} сек.` : ''),
             )
             .setCustomId(getMcCustomIdFromServerId({serverId, prefix: 'server-start-runnig'}))
             .setStyle(ButtonStyle.Primary)

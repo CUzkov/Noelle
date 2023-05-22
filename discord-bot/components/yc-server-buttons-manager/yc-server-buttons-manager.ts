@@ -8,7 +8,7 @@ import {YcInstanceStatus} from 'api';
 // =================================================================
 
 export const YC_INSTANCE_START_PREFIX = 'YC-INSTANCE-START-';
-const YC_INSTANCE_STOP_PREFIX = 'YC-INSTANCE-STOP-';
+export const YC_INSTANCE_STOP_PREFIX = 'YC-INSTANCE-STOP-';
 
 const getYCCustomIdFromInstanceId = ({instanceId, prefix}: {instanceId: string; prefix: string}): string => {
     return prefix + instanceId;
