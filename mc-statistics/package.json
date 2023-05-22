@@ -1,0 +1,50 @@
+{
+    "name": "mc-statistics",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "precommit": "prettier --write .",
+        "start": "cross-env webpack serve --config webpack.dev.ts",
+        "build": "cross-env webpack --config webpack.prod.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/CUzkov/Noelle.git"
+    },
+    "author": "CUzkov",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/CUzkov/Noelle/issues"
+    },
+    "homepage": "https://github.com/CUzkov/Noelle#readme",
+    "dependencies": {
+        "less-loader": "^11.1.0",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
+        "react-redux": "^8.0.5",
+        "react-router-dom": "^6.11.2",
+        "rsuite": "^5.34.0",
+        "use-query-params": "^2.2.1"
+    },
+    "devDependencies": {
+        "@types/node": "^20.2.3",
+        "@types/react": "^18.2.6",
+        "@types/react-dom": "^18.2.4",
+        "@types/webpack": "^5.28.1",
+        "cross-env": "^7.0.3",
+        "css-loader": "^6.7.4",
+        "eslint": "^8.41.0",
+        "html-webpack-plugin": "^5.5.1",
+        "mini-css-extract-plugin": "^2.7.6",
+        "prettier": "^2.8.8",
+        "style-loader": "^3.3.3",
+        "ts-loader": "^9.4.2",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.0.4",
+        "webpack": "^5.83.1",
+        "webpack-cli": "^5.1.1",
+        "webpack-dev-server": "^4.15.0",
+        "webpack-merge": "^5.9.0"
+    }
+}

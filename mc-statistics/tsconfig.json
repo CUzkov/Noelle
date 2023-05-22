@@ -1,0 +1,27 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "ESNext",
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "allowJs": true,
+        "baseUrl": "./",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "downlevelIteration": true,
+        "strictNullChecks": true,
+        "skipLibCheck": true,
+        "outDir": "tsc-build",
+        "paths": {
+            "*": ["./src/*"],
+            "components/*": ["src/components/*"]
+        },
+        "lib": ["esnext", "dom", "dom.iterable"],
+        "sourceMap": true,
+        "noImplicitAny": false
+    },
+    "exclude": ["node_modules", "build"],
+    "include": ["./src", "webpack.dev.ts", "webpack.prod.ts", "webpack.common.ts"]
+}
