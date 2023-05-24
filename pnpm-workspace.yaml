@@ -1,0 +1,3 @@
+packages:
+  - 'discord-bot/*'
+  - 'web-site/*'
