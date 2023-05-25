@@ -6,6 +6,5 @@ WORKDIR /app/discord-bot
 
 RUN npm install -g pnpm
 RUN pnpm i
-RUN pnpm install -g ts-node
 
 CMD ["pnpm run start"]
