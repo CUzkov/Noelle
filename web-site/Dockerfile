@@ -8,7 +8,7 @@ RUN npm install -g pnpm
 RUN pnpm i
 RUN pnpm run build
 RUN mkdir /app/build
-RUN mv * /app/build
+RUN mv ./build /app/build
 
 FROM nginx:1.19.6
 
