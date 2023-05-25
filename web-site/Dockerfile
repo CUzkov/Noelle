@@ -15,6 +15,6 @@ FROM nginx:1.19.6
 RUN rm -rf /usr/share/nginx/html/*
 
 COPY --from=build-stage /app/build /usr/share/nginx/html
-COPY ./frontend/nginx.conf /etc/nginx/nginx.conf
+COPY ./web-site/nginx.conf /etc/nginx/nginx.conf
 
 CMD ["nginx", "-g", "daemon off;"]
