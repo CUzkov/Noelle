@@ -6,3 +6,9 @@ services:
             context: ./
             dockerfile: ./discord-bot/Dockerfile
         network_mode: host
+
+    web-site:
+        build:
+            context: ./
+            dockerfile: ./web-site/Dockerfile
+        network_mode: host

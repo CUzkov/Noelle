@@ -1,10 +1,11 @@
 FROM node:18
 
 RUN mkdir /app 
-ADD ./discord-bot /app/ 
-WORKDIR /app
+ADD ../ /app/
+WORKDIR /app/discord-bot
 
-RUN npm i
-RUN npm install -g ts-node
+RUN npm install -g pnpm
+RUN pnpm i
+RUN pnpm install -g ts-node
 
 CMD ["ts-node", "index.ts"]
