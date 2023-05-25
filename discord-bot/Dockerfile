@@ -7,4 +7,4 @@ WORKDIR /app/discord-bot
 RUN npm install -g pnpm
 RUN pnpm i
 
-CMD ["pnpm", "run start"]
+CMD ["pnpm", "run", "start"]
