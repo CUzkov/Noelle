@@ -1,14 +1,14 @@
 FROM node:18 as build-stage
 
-WORKDIR /app
-
-ADD ../ /app
+RUN mkdir /app
+ADD . /app
+WORKDIR /app/web-site
 
 RUN npm install -g pnpm
 RUN pnpm i
-RUN cd ./web-site && pnpm run build
+RUN pnpm run build
 RUN mkdir /app/build
-RUN cd ./web-site/build && mv * /app/build
+RUN mv * /app/build
 
 FROM nginx:1.19.6
 
