@@ -8,4 +8,4 @@ RUN npm install -g pnpm
 RUN pnpm i
 RUN pnpm install -g ts-node
 
-CMD ["ts-node", "index.ts"]
+CMD ["pnpm run start"]

@@ -4,7 +4,8 @@
     "description": "",
     "main": " ",
     "scripts": {
-        "precommit": "prettier --write ."
+        "precommit": "prettier --write .",
+        "start": "ts-node ./index.ts"
     },
     "repository": {
         "type": "git",
@@ -17,8 +18,9 @@
     },
     "homepage": "https://github.com/CUzkov/Noelle#readme",
     "dependencies": {
+        "@discordjs/builders": "^1.6.3",
         "discord.js": "^14.11.0",
-        "got": "^12.6.0",
+        "got": "^11.8.2",
         "log4js": "^6.9.1",
         "minecraft-protocol": "^1.41.2",
         "node-ssh": "^13.1.0",
