@@ -12,8 +12,8 @@ export const getMcServersSharedData = async () => {
     const config = await getSecret(Secrets.ycInstanceConfig);
 
     mcServersSharedData = new TimeCach(
-        config.reduce((acc, {serverName}) => {
-            acc[serverName] = {
+        config.reduce((acc, {mcServerName}) => {
+            acc[mcServerName] = {
                 isWaitForStarting: false,
                 lastTryTime: 0,
             };

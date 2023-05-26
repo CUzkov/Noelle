@@ -72,8 +72,7 @@ export const getYcInstanceControlButton = ({ycInstanceId, ycInstanceStatus}: Get
         return new ButtonBuilder()
             .setLabel(`остановить сервер с id=${ycInstanceId}`)
             .setCustomId(getYcCustomIdFromInstanceId({ycInstanceId, prefix: YC_INSTANCE_STOP_PREFIX}))
-            .setStyle(ButtonStyle.Primary)
-            .setDisabled(true);
+            .setStyle(ButtonStyle.Primary);
     }
 
     if (ycInstanceStatus === YcInstanceStatus.starting) {

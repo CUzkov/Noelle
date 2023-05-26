@@ -5,6 +5,36 @@ import {getYcInstanceControlButton} from 'components/yc-server-button';
 import {getMcServerButton} from 'components/mc-server-button';
 import {mapYcInstanceStatusToText} from 'components/yc-server-button/yc-server-button';
 
+type GetServerCardButtonParams = {
+    ycInstanceId: string;
+    ycInstanceName: string;
+    ycInstanceStatus: YcInstanceStatus;
+
+    mcServerName: string;
+    mcServerInfo: McServerInfo;
+
+    mcServertimeLeftForRetryStart: number;
+};
+
+export const getServerCardButtons = ({
+    ycInstanceId,
+    ycInstanceStatus,
+    mcServerName,
+    mcServerInfo,
+    mcServertimeLeftForRetryStart,
+}: GetServerCardButtonParams) => {
+    const ycInstanceButton = getYcInstanceControlButton({ycInstanceId, ycInstanceStatus});
+    const mcServerButton = getMcServerButton({
+        ycInstanceId,
+        ycInstanceStatus,
+        mcServerName,
+        mcServerInfo,
+        mcServertimeLeftForRetryStart,
+    });
+
+    return new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents([ycInstanceButton, mcServerButton]);
+};
+
 type GetServerCardParams = {
     host: string;
 
@@ -29,15 +59,6 @@ export const getServerCard = ({
     mcServerInfo,
     mcServertimeLeftForRetryStart,
 }: GetServerCardParams) => {
-    const ycInstanceButton = getYcInstanceControlButton({ycInstanceId, ycInstanceStatus});
-    const mcServerButton = getMcServerButton({
-        ycInstanceId,
-        ycInstanceStatus,
-        mcServerName,
-        mcServerInfo,
-        mcServertimeLeftForRetryStart,
-    });
-
     const embed = new EmbedBuilder()
         .setTitle(`Server card for mc server "${mcServerName}", yc server ${ycInstanceId}`)
         .setThumbnail('https://storage.yandexcloud.net/noelle/server-icon.png')
@@ -66,6 +87,7 @@ export const getServerCard = ({
             {
                 name: 'Status',
                 value: mcServerInfo.status === McServerStatus.running ? 'online' : 'offline',
+                inline: true,
             },
             {
                 name: 'Players',
@@ -83,10 +105,14 @@ export const getServerCard = ({
         ])
         .setTimestamp();
 
-    const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents([
-        ycInstanceButton,
-        mcServerButton,
-    ]);
+    const buttons = getServerCardButtons({
+        ycInstanceId,
+        ycInstanceName,
+        ycInstanceStatus,
+        mcServerName,
+        mcServerInfo,
+        mcServertimeLeftForRetryStart,
+    });
 
-    return [embed, messageActionRow];
+    return [embed, buttons];
 };
