@@ -1,7 +1,7 @@
 export {
     YC_INSTANCE_START_PREFIX,
     YC_INSTANCE_STOP_PREFIX,
-    getYCInstanceIdFromCustomId,
+    getYcInstanceIdFromCustomId,
     isCustomIdForYCInstance,
     getYcInstanceControlButton,
 } from './yc-server-button';

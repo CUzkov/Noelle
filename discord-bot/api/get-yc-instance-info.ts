@@ -41,6 +41,10 @@ export const getYcInstanceInfo = async (instanceId: string) =>
             timeout: 10_000,
         })
         .json<GetYcInstanceInfoResponse>()
+        .then(({name, status}) => ({
+            ycInstanceName: name,
+            ycInstanceStatus: status,
+        }))
         .catch(async (e) => {
             logger.fatal(`Instance info receive was failed for ${instanceId}`);
             logger.fatal(e);

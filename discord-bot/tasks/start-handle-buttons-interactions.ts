@@ -3,7 +3,7 @@ import {Client, Events} from 'discord.js';
 
 import {McServerStatus, YcInstanceStatus, getYcInstanceInfo, startYcInstance, stopYcInstance} from 'api';
 import {
-    getYCInstanceIdFromCustomId,
+    getYcInstanceIdFromCustomId,
     isCustomIdForYCInstance,
     YC_INSTANCE_START_PREFIX,
     getYcInstanceControlButton,
@@ -24,13 +24,16 @@ export const startHandleButtonsInteractions = async (client: Client) => {
         if (!interaction.isButton()) return;
 
         if (isCustomIdForYCInstance({customId: interaction.customId, prefix: YC_INSTANCE_START_PREFIX})) {
-            const instanceId = getYCInstanceIdFromCustomId({
+            const ycInstanceId = getYcInstanceIdFromCustomId({
                 customId: interaction.customId,
                 prefix: YC_INSTANCE_START_PREFIX,
             });
-            await startYcInstance(instanceId);
+            await startYcInstance(ycInstanceId);
 
-            const messageButton = getYcInstanceControlButton({status: YcInstanceStatus.starting, instanceId});
+            const messageButton = getYcInstanceControlButton({
+                ycInstanceStatus: YcInstanceStatus.starting,
+                ycInstanceId,
+            });
             const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
                 messageButton,
             );
@@ -39,26 +42,29 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 components: [messageActionRow],
             });
 
-            logger.info(`Instance ${instanceId} starting`);
+            logger.info(`Instance ${ycInstanceId} starting`);
         }
 
         if (isCustomIdForYCInstance({customId: interaction.customId, prefix: YC_INSTANCE_STOP_PREFIX})) {
-            const instanceId = getYCInstanceIdFromCustomId({
+            const ycInstanceId = getYcInstanceIdFromCustomId({
                 customId: interaction.customId,
                 prefix: YC_INSTANCE_STOP_PREFIX,
             });
 
-            const {status} = await getYcInstanceInfo(instanceId);
+            const {ycInstanceStatus} = await getYcInstanceInfo(ycInstanceId);
 
-            if (status !== YcInstanceStatus.running) {
-                logger.error(`Yc instance ${instanceId} not running`);
+            if (ycInstanceStatus !== YcInstanceStatus.running) {
+                logger.error(`Yc instance ${ycInstanceId} not running`);
                 await interaction.update({});
                 return;
             }
 
-            await stopYcInstance(instanceId);
+            await stopYcInstance(ycInstanceId);
 
-            const messageButton = getYcInstanceControlButton({status: YcInstanceStatus.stopping, instanceId});
+            const messageButton = getYcInstanceControlButton({
+                ycInstanceStatus: YcInstanceStatus.stopping,
+                ycInstanceId,
+            });
             const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
                 messageButton,
             );
@@ -67,33 +73,36 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 components: [messageActionRow],
             });
 
-            logger.info(`Instance ${instanceId} stopping`);
+            logger.info(`Instance ${ycInstanceId} stopping`);
         }
 
         if (isCustomIdForMCServer({customId: interaction.customId, prefix: MC_SERVER_START_PREFIX})) {
             const now = new Date().getTime();
-            const serverId = getMcServerFromCustomId({prefix: MC_SERVER_START_PREFIX, customId: interaction.customId});
+            const {ycInstanceId, mcServerName} = getMcServerFromCustomId({
+                prefix: MC_SERVER_START_PREFIX,
+                customId: interaction.customId,
+            });
             const serverSharedData = await getMcServersSharedData();
 
-            if (serverSharedData.get(serverId.name)) {
+            if (serverSharedData.get(mcServerName)) {
                 await interaction.update({});
                 return;
             }
 
-            const {status: ycInstanceStatus} = await getYcInstanceInfo(serverId.ycInstanceId);
+            const {ycInstanceStatus} = await getYcInstanceInfo(ycInstanceId);
 
             if (ycInstanceStatus !== YcInstanceStatus.running) {
-                logger.error(`Yc instance ${serverId.ycInstanceId} not started`);
+                logger.error(`Yc instance ${ycInstanceId} not started`);
                 await interaction.update({});
                 return;
             }
 
             const mcStartConfig = (await getSecret(Secrets.ycInstanceConfig)).find(
-                ({instanceId}) => serverId.ycInstanceId === instanceId,
+                ({ycInstanceId: currYcInstanceId}) => currYcInstanceId === ycInstanceId,
             );
 
             if (!mcStartConfig) {
-                logger.error(`Cannot find mc server with name ${serverId.name} start config`);
+                logger.error(`Cannot find mc server with name ${mcServerName} start config`);
                 await interaction.update({});
                 return;
             }
@@ -108,11 +117,16 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             });
 
             const messageButton = getMcServerButton({
-                serverId,
-                serverStatus: McServerStatus.intermediate,
+                ycInstanceId,
                 ycInstanceStatus,
-                isWaitForStarting: true,
-                timeLeftForRetry: FOUR_MINUT,
+                mcServerName,
+                mcServerInfo: {
+                    maxPlayers: 0,
+                    playersOnline: 0,
+                    status: McServerStatus.intermediate,
+                    favicon: '',
+                },
+                mcServertimeLeftForRetryStart: FOUR_MINUT,
             });
             const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
                 messageButton,
@@ -122,8 +136,8 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 components: [messageActionRow],
             });
 
-            serverSharedData.set(serverId.name, {isWaitForStarting: true, lastTryTime: now}, FOUR_MINUT);
-            logger.info(`Mc server ${mcStartConfig.serverName} starting`);
+            serverSharedData.set(mcServerName, {isWaitForStarting: true, lastTryTime: now}, FOUR_MINUT);
+            logger.info(`Mc server ${mcStartConfig.mcServerName} starting`);
         }
     });
 };

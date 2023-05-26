@@ -16,8 +16,7 @@ type GetServerCardParams = {
     mcServerPort: number;
     mcServerInfo: McServerInfo;
 
-    isWaitForStartingMcServer: boolean;
-    timeLeftForRetryStartMcServer?: number;
+    mcServertimeLeftForRetryStart: number;
 };
 
 export const getServerCard = ({
@@ -28,16 +27,15 @@ export const getServerCard = ({
     mcServerName,
     mcServerPort,
     mcServerInfo,
-    isWaitForStartingMcServer,
-    timeLeftForRetryStartMcServer,
+    mcServertimeLeftForRetryStart,
 }: GetServerCardParams) => {
-    const ycInstanceButton = getYcInstanceControlButton({instanceId: ycInstanceId, status: ycInstanceStatus});
+    const ycInstanceButton = getYcInstanceControlButton({ycInstanceId, ycInstanceStatus});
     const mcServerButton = getMcServerButton({
+        ycInstanceId,
         ycInstanceStatus,
-        serverId: {ycInstanceId, name: mcServerName},
-        serverStatus: mcServerInfo.status,
-        isWaitForStarting: isWaitForStartingMcServer,
-        timeLeftForRetry: timeLeftForRetryStartMcServer,
+        mcServerName,
+        mcServerInfo,
+        mcServertimeLeftForRetryStart,
     });
 
     const embed = new EmbedBuilder()

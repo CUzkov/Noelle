@@ -11,14 +11,16 @@ export enum Secrets {
 }
 
 export type YcInstanceConfig = {
-    instanceId: string;
-    login: string;
     host: string;
+
+    ycInstanceId: string;
+
+    login: string;
     privateKey: string;
 
     startCommand: string;
-    serverName: string;
-    serverPort: number;
+    mcServerName: string;
+    mcServerPort: number;
 };
 
 type Config = {

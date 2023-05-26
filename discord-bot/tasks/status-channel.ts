@@ -1,7 +1,7 @@
 import {Client} from 'discord.js';
 
 import {getMcServerStatus, getYcInstanceInfo} from 'api';
-import {Secrets, getMcServersSharedData, getSecret, logger, wait} from 'lib';
+import {Secrets, getSecret, logger, wait, getMcServerTimeLeftToRetryStart} from 'lib';
 import {editMessagesComponents, sendComponents, Components} from 'lib/components';
 import {getServerCard} from 'components/server-card';
 
@@ -14,22 +14,10 @@ export const startUpdateStatusChannel = async (client: Client) => {
         const components: Components[] = [];
 
         for (let i = 0; i < ycInstanceConfig.length; i++) {
-            const {
-                instanceId: ycInstanceId,
-                serverName: mcServerName,
-                serverPort: mcServerPort,
-                host,
-            } = ycInstanceConfig[i];
-
-            const {status: ycInstanceStatus, name: ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
-
+            const {ycInstanceId, mcServerName, mcServerPort, host} = ycInstanceConfig[i];
+            const {ycInstanceStatus, ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
             const mcServerInfo = await getMcServerStatus({host, serverPort: mcServerPort});
-            const mcServerSharedData = (await getMcServersSharedData()).get(mcServerName);
-
-            const isWaitForStarting = Boolean(mcServerSharedData?.isWaitForStarting);
-            const timeLeftForRetry = isWaitForStarting
-                ? Math.round((new Date().getTime() - (mcServerSharedData?.lastTryTime ?? 0)) / 1000)
-                : 0;
+            const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
 
             components.push(
                 ...getServerCard({
@@ -40,8 +28,7 @@ export const startUpdateStatusChannel = async (client: Client) => {
                     mcServerName,
                     mcServerPort,
                     mcServerInfo,
-                    isWaitForStartingMcServer: isWaitForStarting,
-                    timeLeftForRetryStartMcServer: timeLeftForRetry,
+                    mcServertimeLeftForRetryStart,
                 }),
             );
         }

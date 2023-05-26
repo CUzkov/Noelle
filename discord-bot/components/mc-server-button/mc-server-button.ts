@@ -1,7 +1,7 @@
 import {ButtonBuilder} from '@discordjs/builders';
 import {ButtonStyle} from 'discord.js';
 
-import {YcInstanceStatus, McServerStatus, McServerId} from 'api';
+import {YcInstanceStatus, McServerStatus, McServerInfo} from 'api';
 
 // =================================================================
 // Префиксы для команд
@@ -10,19 +10,38 @@ import {YcInstanceStatus, McServerStatus, McServerId} from 'api';
 export const MC_SERVER_START_PREFIX = 'MC-INSTANCE-START-';
 const MC_SERVER_STOP_PREFIX = 'MC-INSTANCE-STOP-';
 
-const getMcCustomIdFromServerId = ({serverId, prefix}: {serverId: McServerId; prefix: string}): string => {
-    return prefix + [serverId.name, serverId.ycInstanceId].join('~');
+type GetMcCustomIdFromServerIdParams = {
+    prefix: string;
+    ycInstanceId: string;
+    mcServerName: string;
 };
 
-export const getMcServerFromCustomId = ({customId, prefix}: {customId: string; prefix: string}): McServerId => {
+const getMcCustomIdFromServerId = ({prefix, ycInstanceId, mcServerName}: GetMcCustomIdFromServerIdParams): string => {
+    return prefix + [mcServerName, ycInstanceId].join('~');
+};
+
+type GetMcServerFromCustomIdParams = {
+    customId: string;
+    prefix: string;
+};
+
+export const getMcServerFromCustomId = ({
+    customId,
+    prefix,
+}: GetMcServerFromCustomIdParams): {ycInstanceId: string; mcServerName: string} => {
     const splittedCustomId = customId.replace(prefix, '').split('~');
     return {
-        name: splittedCustomId[0],
+        mcServerName: splittedCustomId[0],
         ycInstanceId: splittedCustomId[1],
     };
 };
 
-export const isCustomIdForMCServer = ({customId, prefix}: {customId: string; prefix: string}): boolean => {
+type IsCustomIdForMCServerParams = {
+    customId: string;
+    prefix: string;
+};
+
+export const isCustomIdForMCServer = ({customId, prefix}: IsCustomIdForMCServerParams): boolean => {
     return customId.startsWith(prefix);
 };
 
@@ -33,57 +52,61 @@ export const isCustomIdForMCServer = ({customId, prefix}: {customId: string; pre
 export let timeToChangeStatus = new Date().getTime();
 
 type GetMCServerButtonParams = {
-    serverId: McServerId;
-    serverStatus: McServerStatus;
+    ycInstanceId: string;
     ycInstanceStatus: YcInstanceStatus;
-    isWaitForStarting: boolean;
-    timeLeftForRetry?: number;
+
+    mcServerName: string;
+    mcServerInfo: McServerInfo;
+    mcServertimeLeftForRetryStart: number;
 };
 
 export const getMcServerButton = ({
-    serverStatus,
-    serverId,
+    ycInstanceId,
     ycInstanceStatus,
-    isWaitForStarting,
-    timeLeftForRetry,
+
+    mcServerName,
+    mcServerInfo,
+    mcServertimeLeftForRetryStart,
 }: GetMCServerButtonParams) => {
+    const mcServerStatus = mcServerInfo.status;
+
     if (ycInstanceStatus !== YcInstanceStatus.running) {
         return new ButtonBuilder()
             .setLabel('для запуска запустите yc сервер')
-            .setCustomId(getMcCustomIdFromServerId({serverId, prefix: 'yc-not-running'}))
+            .setCustomId(getMcCustomIdFromServerId({prefix: 'yc-not-running', ycInstanceId, mcServerName}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
     }
 
-    if (serverStatus === McServerStatus.running) {
+    if (mcServerStatus === McServerStatus.running) {
         return new ButtonBuilder()
-            .setLabel(`остановить сервер ${serverId.name}`)
-            .setCustomId(getMcCustomIdFromServerId({serverId, prefix: MC_SERVER_STOP_PREFIX}))
+            .setLabel(`остановить сервер ${mcServerName}`)
+            .setCustomId(getMcCustomIdFromServerId({prefix: MC_SERVER_STOP_PREFIX, ycInstanceId, mcServerName}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
     }
 
-    if (serverStatus === McServerStatus.intermediate) {
+    if (mcServerStatus === McServerStatus.intermediate) {
         return new ButtonBuilder()
             .setLabel(
-                `сервер ${serverId.name} запускается` +
-                    (isWaitForStarting ? `. TTReap ${timeLeftForRetry ?? -1} сек.` : ''),
+                `сервер ${mcServerName} запускается` +
+                    (mcServertimeLeftForRetryStart > 0 ? `. TTReap ${mcServertimeLeftForRetryStart} сек.` : ''),
             )
-            .setCustomId(getMcCustomIdFromServerId({serverId, prefix: 'server-start-runnig'}))
+            .setCustomId(getMcCustomIdFromServerId({prefix: 'server-start-runnig', ycInstanceId, mcServerName}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
     }
 
-    if (serverStatus === McServerStatus.stop) {
+    if (mcServerStatus === McServerStatus.stop) {
         return new ButtonBuilder()
-            .setLabel('запустить сервер ' + serverId.name)
-            .setCustomId(getMcCustomIdFromServerId({serverId, prefix: MC_SERVER_START_PREFIX}))
+            .setLabel(`запустить сервер ${mcServerName}`)
+            .setCustomId(getMcCustomIdFromServerId({prefix: MC_SERVER_START_PREFIX, ycInstanceId, mcServerName}))
             .setStyle(ButtonStyle.Primary);
     }
 
     return new ButtonBuilder()
-        .setLabel('сервер ' + serverId.name + ' чиллит')
-        .setCustomId(getMcCustomIdFromServerId({serverId, prefix: 'server-chiiiiiled'}))
+        .setLabel(`сервер ${mcServerName} чиллит`)
+        .setCustomId(getMcCustomIdFromServerId({prefix: 'server-chiiiiiled', ycInstanceId, mcServerName}))
         .setStyle(ButtonStyle.Primary)
         .setDisabled(true);
 };

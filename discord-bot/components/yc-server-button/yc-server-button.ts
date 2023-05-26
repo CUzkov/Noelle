@@ -10,15 +10,30 @@ import {YcInstanceStatus} from 'api';
 export const YC_INSTANCE_START_PREFIX = 'YC-INSTANCE-START-';
 export const YC_INSTANCE_STOP_PREFIX = 'YC-INSTANCE-STOP-';
 
-const getYCCustomIdFromInstanceId = ({instanceId, prefix}: {instanceId: string; prefix: string}): string => {
-    return prefix + instanceId;
+type GetYcCustomIdFromInstanceIdParams = {
+    prefix: string;
+    ycInstanceId: string;
 };
 
-export const getYCInstanceIdFromCustomId = ({customId, prefix}: {customId: string; prefix: string}): string => {
+const getYcCustomIdFromInstanceId = ({ycInstanceId, prefix}: GetYcCustomIdFromInstanceIdParams): string => {
+    return prefix + ycInstanceId;
+};
+
+type GetYcInstanceIdFromCustomIdParams = {
+    prefix: string;
+    customId: string;
+};
+
+export const getYcInstanceIdFromCustomId = ({customId, prefix}: GetYcInstanceIdFromCustomIdParams): string => {
     return customId.replace(prefix, '');
 };
 
-export const isCustomIdForYCInstance = ({customId, prefix}: {customId: string; prefix: string}): boolean => {
+type IsCustomIdForYCInstanceParams = {
+    prefix: string;
+    customId: string;
+};
+
+export const isCustomIdForYCInstance = ({customId, prefix}: IsCustomIdForYCInstanceParams): boolean => {
     return customId.startsWith(prefix);
 };
 
@@ -41,45 +56,45 @@ export const mapYcInstanceStatusToText: Record<YcInstanceStatus, string> = {
 };
 
 type GetYCInstanceControlButtonParams = {
-    status: YcInstanceStatus;
-    instanceId: string;
+    ycInstanceId: string;
+    ycInstanceStatus: YcInstanceStatus;
 };
 
-export const getYcInstanceControlButton = ({status, instanceId}: GetYCInstanceControlButtonParams) => {
-    if (status === YcInstanceStatus.stopped) {
+export const getYcInstanceControlButton = ({ycInstanceId, ycInstanceStatus}: GetYCInstanceControlButtonParams) => {
+    if (ycInstanceStatus === YcInstanceStatus.stopped) {
         return new ButtonBuilder()
-            .setLabel(`запустить сервер с id=${instanceId}`)
-            .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: YC_INSTANCE_START_PREFIX}))
+            .setLabel(`запустить сервер с id=${ycInstanceId}`)
+            .setCustomId(getYcCustomIdFromInstanceId({ycInstanceId, prefix: YC_INSTANCE_START_PREFIX}))
             .setStyle(ButtonStyle.Primary);
     }
 
-    if (status === YcInstanceStatus.running) {
+    if (ycInstanceStatus === YcInstanceStatus.running) {
         return new ButtonBuilder()
-            .setLabel(`остановить сервер с id=${instanceId}`)
-            .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: YC_INSTANCE_STOP_PREFIX}))
+            .setLabel(`остановить сервер с id=${ycInstanceId}`)
+            .setCustomId(getYcCustomIdFromInstanceId({ycInstanceId, prefix: YC_INSTANCE_STOP_PREFIX}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
     }
 
-    if (status === YcInstanceStatus.starting) {
+    if (ycInstanceStatus === YcInstanceStatus.starting) {
         return new ButtonBuilder()
-            .setLabel(`сервер с id=${instanceId} запускается`)
-            .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: 'starting'}))
+            .setLabel(`сервер с id=${ycInstanceId} запускается`)
+            .setCustomId(getYcCustomIdFromInstanceId({ycInstanceId, prefix: 'starting'}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
     }
 
-    if (status === YcInstanceStatus.stopping) {
+    if (ycInstanceStatus === YcInstanceStatus.stopping) {
         return new ButtonBuilder()
-            .setLabel(`сервер с id=${instanceId} останавливается`)
-            .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: 'stopping'}))
+            .setLabel(`сервер с id=${ycInstanceId} останавливается`)
+            .setCustomId(getYcCustomIdFromInstanceId({ycInstanceId, prefix: 'stopping'}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
     }
 
     return new ButtonBuilder()
-        .setLabel(`сервер с id=${instanceId} чиллит`)
-        .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: 'chill'}))
+        .setLabel(`сервер с id=${ycInstanceId} чиллит`)
+        .setCustomId(getYcCustomIdFromInstanceId({ycInstanceId, prefix: 'chill'}))
         .setStyle(ButtonStyle.Primary)
         .setDisabled(true);
 };
