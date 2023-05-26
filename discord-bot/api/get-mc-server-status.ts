@@ -13,6 +13,11 @@ export type McServerInfo = {
     favicon: string;
 };
 
+export type McServerId = {
+    name: string;
+    ycInstanceId: string;
+};
+
 type GetMcServerStatusParams = {
     host: string;
     serverPort: number;

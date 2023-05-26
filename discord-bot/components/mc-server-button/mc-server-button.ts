@@ -1,12 +1,7 @@
-import {ActionRowBuilder, ButtonBuilder, EmbedBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
+import {ButtonBuilder} from '@discordjs/builders';
 import {ButtonStyle} from 'discord.js';
 
-import {YcInstanceStatus, McServerStatus, McServerInfo} from 'api';
-
-type McServerId = {
-    name: string;
-    ycInstanceId: string;
-};
+import {YcInstanceStatus, McServerStatus, McServerId} from 'api';
 
 // =================================================================
 // Префиксы для команд
@@ -91,67 +86,4 @@ export const getMcServerButton = ({
         .setCustomId(getMcCustomIdFromServerId({serverId, prefix: 'server-chiiiiiled'}))
         .setStyle(ButtonStyle.Primary)
         .setDisabled(true);
-};
-
-type GetMcServerComponent = {
-    host: string;
-
-    serverName: string;
-    serverPort: number;
-    serverInfo: McServerInfo;
-
-    ycInstanceId: string;
-    ycInstanceStatus: YcInstanceStatus;
-
-    isWaitForStarting: boolean;
-    timeLeftForRetry?: number;
-};
-
-export const getMcServerComponent = ({
-    host,
-
-    serverPort,
-    serverName,
-    serverInfo,
-
-    ycInstanceId,
-    ycInstanceStatus,
-
-    isWaitForStarting,
-    timeLeftForRetry,
-}: GetMcServerComponent) => {
-    const embedYcInstance = new EmbedBuilder()
-        .setTitle(`Minecraft server for ${ycInstanceId} yc server`)
-        .setThumbnail('https://storage.yandexcloud.net/noelle/server-icon.png')
-        .setFields([
-            {
-                name: serverName,
-                value: serverInfo.status === McServerStatus.running ? 'online' : 'offline',
-            },
-            {
-                name: 'Players',
-                value:
-                    serverInfo.status === McServerStatus.running
-                        ? `${serverInfo.playersOnline} / ${serverInfo.maxPlayers}`
-                        : '- / -',
-                inline: true,
-            },
-            {
-                name: 'Port/Ip',
-                value: `${host}:${serverPort}`,
-                inline: true,
-            },
-        ])
-        .setTimestamp();
-
-    const messageButton = getMcServerButton({
-        serverStatus: serverInfo.status,
-        serverId: {name: serverName, ycInstanceId},
-        ycInstanceStatus,
-        isWaitForStarting,
-        timeLeftForRetry,
-    });
-    const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(messageButton);
-
-    return [embedYcInstance, messageActionRow];
 };

@@ -4,4 +4,4 @@ export {
     isCustomIdForMCServer,
     MC_SERVER_START_PREFIX,
     getMcServerButton,
-} from './mc-server-buttons-manager';
+} from './mc-server-button';

@@ -1,4 +1,4 @@
-import {ActionRowBuilder, ButtonBuilder, EmbedBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
+import {ButtonBuilder} from '@discordjs/builders';
 import {ButtonStyle} from 'discord.js';
 
 import {YcInstanceStatus} from 'api';
@@ -82,34 +82,4 @@ export const getYcInstanceControlButton = ({status, instanceId}: GetYCInstanceCo
         .setCustomId(getYCCustomIdFromInstanceId({instanceId, prefix: 'chill'}))
         .setStyle(ButtonStyle.Primary)
         .setDisabled(true);
-};
-
-type GetYCInstanceComponent = {
-    status: YcInstanceStatus;
-    instanceId: string;
-    instanceName: string;
-};
-
-export const getYCInstanceComponent = ({status, instanceId, instanceName}: GetYCInstanceComponent) => {
-    const embedYcInstance = new EmbedBuilder()
-        .setTitle(`YC server status for ${instanceName} yc server`)
-        .setThumbnail('https://storage.yandexcloud.net/noelle/server-icon.png')
-        .setFields([
-            {
-                name: 'Status',
-                value: mapYcInstanceStatusToText[status],
-                inline: true,
-            },
-            {
-                name: 'ID',
-                value: instanceId,
-                inline: true,
-            },
-        ])
-        .setTimestamp();
-
-    const messageButton = getYcInstanceControlButton({status, instanceId});
-    const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(messageButton);
-
-    return [embedYcInstance, messageActionRow];
 };

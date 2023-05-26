@@ -1,10 +1,9 @@
 import {Client} from 'discord.js';
 
-import {McServerStatus, getMcServerStatus, getYcInstanceInfo} from 'api';
+import {getMcServerStatus, getYcInstanceInfo} from 'api';
 import {Secrets, getMcServersSharedData, getSecret, logger, wait} from 'lib';
-import {getYCInstanceComponent} from 'components/yc-server-buttons-manager';
 import {editMessagesComponents, sendComponents, Components} from 'lib/components';
-import {getMcServerComponent} from 'components/mc-server-buttons-manager';
+import {getServerCard} from 'components/server-card';
 
 export const startUpdateStatusChannel = async (client: Client) => {
     while (true) {
@@ -15,19 +14,17 @@ export const startUpdateStatusChannel = async (client: Client) => {
         const components: Components[] = [];
 
         for (let i = 0; i < ycInstanceConfig.length; i++) {
-            const {instanceId: ycInstanceId, serverName, serverPort, host} = ycInstanceConfig[i];
+            const {
+                instanceId: ycInstanceId,
+                serverName: mcServerName,
+                serverPort: mcServerPort,
+                host,
+            } = ycInstanceConfig[i];
 
             const {status: ycInstanceStatus, name: ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
-            components.push(
-                ...getYCInstanceComponent({
-                    instanceId: ycInstanceId,
-                    status: ycInstanceStatus,
-                    instanceName: ycInstanceName,
-                }),
-            );
 
-            const serverInfo = await getMcServerStatus({host, serverPort});
-            const mcServerSharedData = (await getMcServersSharedData()).get(serverName);
+            const mcServerInfo = await getMcServerStatus({host, serverPort: mcServerPort});
+            const mcServerSharedData = (await getMcServersSharedData()).get(mcServerName);
 
             const isWaitForStarting = Boolean(mcServerSharedData?.isWaitForStarting);
             const timeLeftForRetry = isWaitForStarting
@@ -35,21 +32,16 @@ export const startUpdateStatusChannel = async (client: Client) => {
                 : 0;
 
             components.push(
-                ...getMcServerComponent({
+                ...getServerCard({
                     host,
-
-                    serverName,
-                    serverPort,
-                    serverInfo: {
-                        ...serverInfo,
-                        status: isWaitForStarting ? McServerStatus.intermediate : serverInfo.status,
-                    },
-
                     ycInstanceId,
+                    ycInstanceName,
                     ycInstanceStatus,
-
-                    isWaitForStarting,
-                    timeLeftForRetry,
+                    mcServerName,
+                    mcServerPort,
+                    mcServerInfo,
+                    isWaitForStartingMcServer: isWaitForStarting,
+                    timeLeftForRetryStartMcServer: timeLeftForRetry,
                 }),
             );
         }

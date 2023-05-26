@@ -8,13 +8,13 @@ import {
     YC_INSTANCE_START_PREFIX,
     getYcInstanceControlButton,
     YC_INSTANCE_STOP_PREFIX,
-} from 'components/yc-server-buttons-manager';
+} from 'components/yc-server-button';
 import {
     getMcServerFromCustomId,
     isCustomIdForMCServer,
     MC_SERVER_START_PREFIX,
     getMcServerButton,
-} from 'components/mc-server-buttons-manager';
+} from 'components/mc-server-button';
 import {getMcServersSharedData, logger, execSshCommand, getSecret, Secrets} from 'lib';
 
 const FOUR_MINUT = 4 * 60 * 1_000;
