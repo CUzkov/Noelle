@@ -1,21 +1,26 @@
-import {ActionRowBuilder, MessageActionRowComponentBuilder} from '@discordjs/builders';
 import {Client, Events} from 'discord.js';
 
-import {McServerStatus, YcInstanceStatus, getYcInstanceInfo, startYcInstance, stopYcInstance} from 'api';
+import {
+    McServerStatus,
+    YcInstanceStatus,
+    getMcServerStatus,
+    getYcInstanceInfo,
+    startYcInstance,
+    stopYcInstance,
+} from 'api';
 import {
     getYcInstanceIdFromCustomId,
     isCustomIdForYCInstance,
     YC_INSTANCE_START_PREFIX,
-    getYcInstanceControlButton,
     YC_INSTANCE_STOP_PREFIX,
 } from 'components/yc-server-button';
 import {
     getMcServerFromCustomId,
     isCustomIdForMCServer,
     MC_SERVER_START_PREFIX,
-    getMcServerButton,
 } from 'components/mc-server-button';
-import {getMcServersSharedData, logger, execSshCommand, getSecret, Secrets} from 'lib';
+import {getMcServersSharedData, logger, execSshCommand, getSecret, Secrets, getMcServerTimeLeftToRetryStart} from 'lib';
+import {getServerCardButtons} from 'components/server-card';
 
 const FOUR_MINUT = 4 * 60 * 1_000;
 
@@ -28,19 +33,35 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 customId: interaction.customId,
                 prefix: YC_INSTANCE_START_PREFIX,
             });
+
             await startYcInstance(ycInstanceId);
 
-            const messageButton = getYcInstanceControlButton({
-                ycInstanceStatus: YcInstanceStatus.starting,
-                ycInstanceId,
-            });
-            const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
-                messageButton,
+            const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
+            const config = ycInstanceConfig.find(
+                ({ycInstanceId: currYcInstanceId}) => currYcInstanceId === ycInstanceId,
             );
 
-            await interaction.update({
-                components: [messageActionRow],
+            if (!config) {
+                logger.error(`Config for yc instance ${ycInstanceId} not found`);
+                await interaction.update({});
+                return;
+            }
+
+            const {host, mcServerName, mcServerPort} = config;
+            const {ycInstanceStatus, ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
+            const mcServerInfo = await getMcServerStatus({host, serverPort: mcServerPort});
+            const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
+
+            const buttons = getServerCardButtons({
+                ycInstanceId,
+                ycInstanceName,
+                ycInstanceStatus,
+                mcServerName,
+                mcServerInfo,
+                mcServertimeLeftForRetryStart,
             });
+
+            await interaction.update({components: [buttons]});
 
             logger.info(`Instance ${ycInstanceId} starting`);
         }
@@ -51,9 +72,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 prefix: YC_INSTANCE_STOP_PREFIX,
             });
 
-            const {ycInstanceStatus} = await getYcInstanceInfo(ycInstanceId);
-
-            if (ycInstanceStatus !== YcInstanceStatus.running) {
+            if ((await getYcInstanceInfo(ycInstanceId)).ycInstanceStatus !== YcInstanceStatus.running) {
                 logger.error(`Yc instance ${ycInstanceId} not running`);
                 await interaction.update({});
                 return;
@@ -61,18 +80,32 @@ export const startHandleButtonsInteractions = async (client: Client) => {
 
             await stopYcInstance(ycInstanceId);
 
-            const messageButton = getYcInstanceControlButton({
-                ycInstanceStatus: YcInstanceStatus.stopping,
-                ycInstanceId,
-            });
-            const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
-                messageButton,
+            const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
+            const config = ycInstanceConfig.find(
+                ({ycInstanceId: currYcInstanceId}) => currYcInstanceId === ycInstanceId,
             );
 
-            await interaction.update({
-                components: [messageActionRow],
+            if (!config) {
+                logger.error(`Config for yc instance ${ycInstanceId} not found`);
+                await interaction.update({});
+                return;
+            }
+
+            const {host, mcServerName, mcServerPort} = config;
+            const {ycInstanceStatus, ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
+            const mcServerInfo = await getMcServerStatus({host, serverPort: mcServerPort});
+            const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
+
+            const buttons = getServerCardButtons({
+                ycInstanceId,
+                ycInstanceName,
+                ycInstanceStatus,
+                mcServerName,
+                mcServerInfo,
+                mcServertimeLeftForRetryStart,
             });
 
+            await interaction.update({components: [buttons]});
             logger.info(`Instance ${ycInstanceId} stopping`);
         }
 
@@ -89,9 +122,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            const {ycInstanceStatus} = await getYcInstanceInfo(ycInstanceId);
-
-            if (ycInstanceStatus !== YcInstanceStatus.running) {
+            if ((await getYcInstanceInfo(ycInstanceId)).ycInstanceStatus !== YcInstanceStatus.running) {
                 logger.error(`Yc instance ${ycInstanceId} not started`);
                 await interaction.update({});
                 return;
@@ -116,8 +147,12 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 },
             });
 
-            const messageButton = getMcServerButton({
+            const {ycInstanceStatus, ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
+            const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
+
+            const buttons = getServerCardButtons({
                 ycInstanceId,
+                ycInstanceName,
                 ycInstanceStatus,
                 mcServerName,
                 mcServerInfo: {
@@ -126,15 +161,10 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                     status: McServerStatus.intermediate,
                     favicon: '',
                 },
-                mcServertimeLeftForRetryStart: FOUR_MINUT,
+                mcServertimeLeftForRetryStart,
             });
-            const messageActionRow = new ActionRowBuilder<MessageActionRowComponentBuilder>().setComponents(
-                messageButton,
-            );
 
-            await interaction.update({
-                components: [messageActionRow],
-            });
+            await interaction.update({components: [buttons]});
 
             serverSharedData.set(mcServerName, {isWaitForStarting: true, lastTryTime: now}, FOUR_MINUT);
             logger.info(`Mc server ${mcStartConfig.mcServerName} starting`);

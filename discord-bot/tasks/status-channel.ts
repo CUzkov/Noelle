@@ -7,7 +7,7 @@ import {getServerCard} from 'components/server-card';
 
 export const startUpdateStatusChannel = async (client: Client) => {
     while (true) {
-        await wait(15_000);
+        await wait(5_000);
 
         const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
 
