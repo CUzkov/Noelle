@@ -1,6 +1,6 @@
 import {Client, Events, GatewayIntentBits} from 'discord.js';
 
-import {logger, getSecret, wait, Secrets, getMcServersSharedData} from 'lib';
+import {logger, getSecret, Secrets, getMcServersSharedData} from 'lib';
 import {startUpdateStatusChannel, startHandleButtonsInteractions} from 'tasks';
 
 process.on('unhandledRejection', async (reason) => {

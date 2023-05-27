@@ -24,6 +24,7 @@
         "log4js": "^6.9.1",
         "minecraft-protocol": "^1.41.2",
         "node-ssh": "^13.1.0",
+        "rsync": "^0.6.1",
         "ts-node": "^10.9.1",
         "typescript": "^5.0.4"
     },

@@ -34,8 +34,6 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 prefix: YC_INSTANCE_START_PREFIX,
             });
 
-            console.log(ycInstanceId);
-
             await startYcInstance(ycInstanceId);
 
             const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);

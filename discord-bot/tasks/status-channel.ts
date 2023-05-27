@@ -9,6 +9,8 @@ export const startUpdateStatusChannel = async (client: Client) => {
     while (true) {
         await wait(5_000);
 
+        console.log('Update status channel');
+
         const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
 
         const components: Components[] = [];
