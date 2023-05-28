@@ -23,13 +23,12 @@
         "got": "^11.8.2",
         "log4js": "^6.9.1",
         "minecraft-protocol": "^1.41.2",
+        "node-scp": "^0.0.22",
         "node-ssh": "^13.1.0",
-        "rsync": "^0.6.1",
         "ts-node": "^10.9.1",
         "typescript": "^5.0.4"
     },
     "devDependencies": {
-        "@types/rsync": "^0.4.32",
         "eslint": "^8.41.0",
         "prettier": "^2.8.8",
         "tsconfig-paths": "^4.2.0"

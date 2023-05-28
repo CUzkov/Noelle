@@ -14,11 +14,7 @@ import {
     YC_INSTANCE_START_PREFIX,
     YC_INSTANCE_STOP_PREFIX,
 } from 'components/yc-server-button';
-import {
-    getMcServerFromCustomId,
-    isCustomIdForMCServer,
-    MC_SERVER_START_PREFIX,
-} from 'components/mc-server-button';
+import {getMcServerFromCustomId, isCustomIdForMCServer, MC_SERVER_START_PREFIX} from 'components/mc-server-button';
 import {getMcServersSharedData, logger, execSshCommand, getSecret, Secrets, getMcServerTimeLeftToRetryStart} from 'lib';
 import {getServerCardButtons} from 'components/server-card';
 

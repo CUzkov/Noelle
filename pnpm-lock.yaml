@@ -21,6 +21,9 @@ importers:
       minecraft-protocol:
         specifier: ^1.41.2
         version: 1.41.2
+      node-scp:
+        specifier: ^0.0.22
+        version: 0.0.22
       node-ssh:
         specifier: ^13.1.0
         version: 13.1.0
@@ -2811,6 +2814,12 @@ packages:
     resolution: {integrity: sha512-Bvso6Zi9LY4otIZefYrscsUpo2mUpiAVIEmSZV2q41sP8tHZoert3Yu6zv4f/RXJqMNZQKCtnhDugIuCma23YA==}
     dependencies:
       asn1: 0.2.3
+    dev: false
+
+  /node-scp@0.0.22:
+    resolution: {integrity: sha512-ojo0gGFKmCQqwKKlD7PTeb9w9Xd9uLMHIs1kc6TO/dcBrdRxZ93GuOSsR0gnnoHmOwxBhnF82cE5jAQ0HPDePA==}
+    dependencies:
+      ssh2: 1.13.0
     dev: false
 
   /node-ssh@13.1.0:

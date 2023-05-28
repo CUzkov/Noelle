@@ -6,9 +6,21 @@ services:
             context: ./
             dockerfile: ./discord-bot/Dockerfile
         network_mode: host
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 5
+                window: 60s
 
     web-site:
         build:
             context: ./
             dockerfile: ./web-site/Dockerfile
         network_mode: host
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 5
+                window: 60s
