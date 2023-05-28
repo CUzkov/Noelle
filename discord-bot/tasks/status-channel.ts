@@ -38,6 +38,8 @@ export const startUpdateStatusChannel = async (client: Client) => {
         const channel = client.channels.cache.get(await getSecret(Secrets.discordStatusChannelId));
 
         if (!channel || !channel.isTextBased()) {
+            console.log(await getSecret(Secrets.discordStatusChannelId));
+            console.log(channel?.isDMBased(), channel?.isTextBased(), channel?.isThread(), channel?.isVoiceBased(), channel);
             logger.fatal('Given status channel not exist or not text based');
             process.exit();
         }
