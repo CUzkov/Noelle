@@ -15,7 +15,7 @@ export const syncMcStatistics = async () => {
                 const client = await Client({
                     host,
                     username: login,
-                    privateKey,
+                    privateKey: Buffer.from(privateKey, 'base64').toString('utf-8'),
                 });
 
                 await client.downloadDir(`/home/cuzkov/${mcServerName}`, mcServerStatsPath);
