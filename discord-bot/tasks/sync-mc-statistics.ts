@@ -1,5 +1,6 @@
-import { Secrets, getSecret, wait } from "lib";
+import Rsync from 'rsync';
 
+import { Secrets, getSecret, wait } from "lib";
 
 export const syncMcStatistics = async () => {
     while (true) {
@@ -8,7 +9,7 @@ export const syncMcStatistics = async () => {
         const config = await getSecret(Secrets.ycInstanceConfig);
 
         for (let i = 0; i < config.length; i++) {
-            const {} = config[i];
+            const {mcServerStatsPath} = config[i];
             
             
         }

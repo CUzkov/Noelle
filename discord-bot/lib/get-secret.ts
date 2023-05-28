@@ -21,6 +21,7 @@ export type YcInstanceConfig = {
     startCommand: string;
     mcServerName: string;
     mcServerPort: number;
+    mcServerStatsPath: string;
 };
 
 type Config = {

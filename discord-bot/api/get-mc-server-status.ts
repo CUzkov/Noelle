@@ -30,6 +30,7 @@ export const getMcServerStatus = async ({host, serverPort}: GetMcServerStatusPar
         const result = await ping({
             host,
             port: serverPort,
+            closeTimeout: 5_000,
         });
 
         if ('description' in result) {
