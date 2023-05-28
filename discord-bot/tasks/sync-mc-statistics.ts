@@ -12,7 +12,7 @@ export const syncMcStatistics = async () => {
         for (let i = 0; i < config.length; i++) {
             const {mcServerStatsPath, host, login, mcServerName, privateKey} = config[i];
 
-            const localpath = `/home/cuzkov/${mcServerName.replace(' ', '-').toLocaleLowerCase()}`
+            const localpath = `/home/cuzkov/${mcServerName.replace(/\s+/gi, '-').toLocaleLowerCase()}`;
 
             try {
                 if (!existsSync(localpath)) {
