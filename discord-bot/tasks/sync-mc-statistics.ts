@@ -25,7 +25,7 @@ export const syncMcStatistics = async () => {
                     privateKey: Buffer.from(privateKey, 'base64').toString('utf-8'),
                 });
 
-                await client.downloadDir(localpath, mcServerStatsPath);
+                await client.downloadDir(mcServerStatsPath, localpath);
 
                 client.close();
             } catch (error) {
