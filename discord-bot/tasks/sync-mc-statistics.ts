@@ -5,6 +5,7 @@ import {getMcServerStatsPath} from 'lib/paths';
 import {wait} from 'lib/wait';
 import {getSecret, Secrets} from 'lib/get-secret';
 import {logger} from 'lib/logger';
+import {getYcInstanceInfo, YcInstanceStatus} from 'api';
 
 export const syncMcStatistics = async () => {
     while (true) {
@@ -13,8 +14,14 @@ export const syncMcStatistics = async () => {
         const config = await getSecret(Secrets.ycInstanceConfig);
 
         for (let i = 0; i < config.length; i++) {
-            const {mcServerStatsPath, host, login, mcServerName, privateKey} = config[i];
+            const {mcServerStatsPath, host, login, mcServerName, privateKey, ycInstanceId} = config[i];
             const localpath = getMcServerStatsPath({mcServerName});
+
+            const {ycInstanceStatus} = await getYcInstanceInfo(ycInstanceId);
+
+            if (ycInstanceStatus !== YcInstanceStatus.running) {
+                continue;
+            }
 
             try {
                 if (!existsSync(localpath)) {

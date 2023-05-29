@@ -10,7 +10,7 @@ import {logger} from 'lib/logger';
 
 export const startUpdateStatusChannel = async (client: Client) => {
     while (true) {
-        await wait(5_000);
+        await wait(15_000);
 
         const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
 

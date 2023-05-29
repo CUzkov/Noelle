@@ -3,7 +3,26 @@ import {ActionRowBuilder, EmbedBuilder, MessageActionRowComponentBuilder} from '
 import {YcInstanceStatus, McServerStatus, McServerInfo} from 'api';
 import {getYcInstanceControlButton} from 'components/yc-server-button';
 import {getMcServerButton} from 'components/mc-server-button';
-import {mapYcInstanceStatusToText} from 'components/yc-server-button/yc-server-button';
+
+const mapYcInstanceStatusToText: Record<YcInstanceStatus, string> = {
+    [YcInstanceStatus.crashed]: '🔴 Сервер крашнулся',
+    [YcInstanceStatus.deleting]: '🔴 Сервер удаляется',
+    [YcInstanceStatus.error]: '🔴 Сервер ошибся',
+    [YcInstanceStatus.provisioning]: '🟡 Сервер запускается',
+    [YcInstanceStatus.restarting]: '🟡 Сервер перезагружается',
+    [YcInstanceStatus.running]: '🟢 Сервер запущен',
+    [YcInstanceStatus.starting]: '🟡 Сервер запускается',
+    [YcInstanceStatus.stopped]: '🔴 Сервер остановлен',
+    [YcInstanceStatus.stopping]: '🔴 Сервер останавливается',
+    [YcInstanceStatus.updating]: '🟡 Сервер обновляется',
+    [YcInstanceStatus.statusUnspecified]: '🔴 GG',
+};
+
+const mapMcServerStatusToText: Record<McServerStatus, string> = {
+    [McServerStatus.intermediate]: '🟡 Сервер запускается',
+    [McServerStatus.stop]: '🔴 Сервер остановлен',
+    [McServerStatus.running]: '🟢 Сервер запущен',
+};
 
 type GetServerCardButtonParams = {
     ycInstanceId: string;
@@ -86,7 +105,7 @@ export const getServerCard = ({
             },
             {
                 name: 'Status',
-                value: mcServerInfo.status === McServerStatus.running ? 'online' : 'offline',
+                value: mapMcServerStatusToText[mcServerInfo.status],
                 inline: true,
             },
             {

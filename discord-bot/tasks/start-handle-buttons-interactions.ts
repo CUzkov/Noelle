@@ -48,14 +48,14 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             }
 
             const {host, mcServerName, mcServerPort} = config;
-            const {ycInstanceStatus, ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
+            const {ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
             const mcServerInfo = await getMcServerStatus({host, serverPort: mcServerPort});
             const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
 
             const buttons = getServerCardButtons({
                 ycInstanceId,
                 ycInstanceName,
-                ycInstanceStatus,
+                ycInstanceStatus: YcInstanceStatus.provisioning,
                 mcServerName,
                 mcServerInfo,
                 mcServertimeLeftForRetryStart,
@@ -92,14 +92,14 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             }
 
             const {host, mcServerName, mcServerPort} = config;
-            const {ycInstanceStatus, ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
+            const {ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
             const mcServerInfo = await getMcServerStatus({host, serverPort: mcServerPort});
             const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
 
             const buttons = getServerCardButtons({
                 ycInstanceId,
                 ycInstanceName,
-                ycInstanceStatus,
+                ycInstanceStatus: YcInstanceStatus.stopping,
                 mcServerName,
                 mcServerInfo,
                 mcServertimeLeftForRetryStart,
