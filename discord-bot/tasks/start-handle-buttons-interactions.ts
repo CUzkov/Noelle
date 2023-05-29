@@ -1,13 +1,6 @@
 import {Client, Events} from 'discord.js';
 
-import {
-    McServerStatus,
-    YcInstanceStatus,
-    getMcServerStatus,
-    getYcInstanceInfo,
-    startYcInstance,
-    stopYcInstance,
-} from 'api';
+import {McServerStatus, YcInstanceStatus, getYcInstanceInfo, startYcInstance, stopYcInstance} from 'api';
 import {
     getYcInstanceIdFromCustomId,
     isCustomIdForYCInstance,
@@ -45,25 +38,25 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            await interaction.deferReply({ephemeral: true});
+            startYcInstance(ycInstanceId);
 
-            await startYcInstance(ycInstanceId);
-
-            const {host, mcServerName, mcServerPort} = config;
-            const {ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
-            const mcServerInfo = await getMcServerStatus({host, serverPort: mcServerPort});
-            const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
+            const {mcServerName} = config;
 
             const buttons = getServerCardButtons({
                 ycInstanceId,
-                ycInstanceName,
+                ycInstanceName: '',
                 ycInstanceStatus: YcInstanceStatus.provisioning,
                 mcServerName,
-                mcServerInfo,
-                mcServertimeLeftForRetryStart,
+                mcServerInfo: {
+                    maxPlayers: 0,
+                    playersOnline: 0,
+                    status: McServerStatus.stop,
+                    favicon: '',
+                },
+                mcServertimeLeftForRetryStart: 0,
             });
 
-            await interaction.editReply({components: [buttons]});
+            await interaction.update({components: [buttons]});
             logger.info(`Instance ${ycInstanceId} starting`);
         }
 
@@ -90,25 +83,25 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            await interaction.deferReply({ephemeral: true});
+            stopYcInstance(ycInstanceId);
 
-            await stopYcInstance(ycInstanceId);
-
-            const {host, mcServerName, mcServerPort} = config;
-            const {ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
-            const mcServerInfo = await getMcServerStatus({host, serverPort: mcServerPort});
-            const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
+            const {mcServerName} = config;
 
             const buttons = getServerCardButtons({
                 ycInstanceId,
-                ycInstanceName,
+                ycInstanceName: '',
                 ycInstanceStatus: YcInstanceStatus.stopping,
                 mcServerName,
-                mcServerInfo,
-                mcServertimeLeftForRetryStart,
+                mcServerInfo: {
+                    maxPlayers: 0,
+                    playersOnline: 0,
+                    status: McServerStatus.intermediate,
+                    favicon: '',
+                },
+                mcServertimeLeftForRetryStart: 0,
             });
 
-            await interaction.editReply({components: [buttons]});
+            await interaction.update({components: [buttons]});
             logger.info(`Instance ${ycInstanceId} stopping`);
         }
 
@@ -141,9 +134,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            await interaction.deferReply({ephemeral: true});
-
-            await execSshCommand({
+            execSshCommand({
                 command: mcStartConfig.startCommand,
                 config: {
                     host: mcStartConfig.host,
@@ -152,13 +143,12 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 },
             });
 
-            const {ycInstanceStatus, ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
             const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
 
             const buttons = getServerCardButtons({
                 ycInstanceId,
-                ycInstanceName,
-                ycInstanceStatus,
+                ycInstanceName: '',
+                ycInstanceStatus: YcInstanceStatus.running,
                 mcServerName,
                 mcServerInfo: {
                     maxPlayers: 0,
@@ -169,7 +159,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 mcServertimeLeftForRetryStart,
             });
 
-            await interaction.editReply({components: [buttons]});
+            await interaction.update({components: [buttons]});
 
             serverSharedData.set(mcServerName, {isWaitForStarting: true, lastTryTime: now}, FOUR_MINUT);
             logger.info(`Mc server ${mcStartConfig.mcServerName} starting`);
