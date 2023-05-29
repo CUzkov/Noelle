@@ -12,6 +12,8 @@ services:
                 delay: 5s
                 max_attempts: 5
                 window: 60s
+        volumes:
+            - /home/cuzkov/mc-servers-stats:/mc-server-statistics
 
     web-site:
         build:

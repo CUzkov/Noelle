@@ -1,5 +1,5 @@
 import got from 'got';
-import {logger} from 'lib';
+import {logger} from 'lib/logger';
 
 /**
  * Описание ручки в документации

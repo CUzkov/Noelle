@@ -1,6 +1,8 @@
 import got from 'got';
 
-import {logger, Secrets, getIamToken} from 'lib';
+import {Secrets} from 'lib/get-secret';
+import {getIamToken} from 'lib/get-iam-token';
+import {logger} from 'lib/logger';
 
 /**
  * Описание ручки в документации

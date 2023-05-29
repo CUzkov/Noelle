@@ -1,7 +1,10 @@
 import {Client} from 'node-scp';
 import {mkdirSync, existsSync} from 'fs';
 
-import {Secrets, getSecret, logger, wait} from 'lib';
+import {getMcServerStatsPath} from 'lib/paths';
+import {wait} from 'lib/wait';
+import {getSecret, Secrets} from 'lib/get-secret';
+import {logger} from 'lib/logger';
 
 export const syncMcStatistics = async () => {
     while (true) {
@@ -11,8 +14,7 @@ export const syncMcStatistics = async () => {
 
         for (let i = 0; i < config.length; i++) {
             const {mcServerStatsPath, host, login, mcServerName, privateKey} = config[i];
-
-            const localpath = `/mc-server-statistics/${mcServerName.replace(/\s+/gi, '-').toLocaleLowerCase()}`;
+            const localpath = getMcServerStatsPath({mcServerName});
 
             try {
                 if (!existsSync(localpath)) {

@@ -1,5 +1,7 @@
 import {getIamToken as getIamTokenApi} from 'api';
-import {TimeCach, logger, wait} from 'lib';
+import {logger} from 'lib/logger';
+import {TimeCach} from 'lib/time-cach';
+import {wait} from 'lib/wait';
 
 const HOUR = 60 * 60 * 1_000;
 

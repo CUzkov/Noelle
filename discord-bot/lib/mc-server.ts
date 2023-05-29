@@ -1,4 +1,4 @@
-import {getMcServersSharedData} from 'lib';
+import {getMcServersSharedData} from 'lib/get-mc-servers-shared-data';
 
 type GetMcServerStartRetryInfoParams = {
     mcServerName: string;

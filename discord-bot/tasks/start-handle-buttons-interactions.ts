@@ -15,8 +15,12 @@ import {
     YC_INSTANCE_STOP_PREFIX,
 } from 'components/yc-server-button';
 import {getMcServerFromCustomId, isCustomIdForMCServer, MC_SERVER_START_PREFIX} from 'components/mc-server-button';
-import {getMcServersSharedData, logger, execSshCommand, getSecret, Secrets, getMcServerTimeLeftToRetryStart} from 'lib';
 import {getServerCardButtons} from 'components/server-card';
+import {Secrets, getSecret} from 'lib/get-secret';
+import {logger} from 'lib/logger';
+import {getMcServerTimeLeftToRetryStart} from 'lib/mc-server';
+import {getMcServersSharedData} from 'lib/get-mc-servers-shared-data';
+import {execSshCommand} from 'lib/ssh';
 
 const FOUR_MINUT = 4 * 60 * 1_000;
 

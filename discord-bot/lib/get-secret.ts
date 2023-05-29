@@ -1,5 +1,6 @@
-import {logger, TimeCach, wait} from 'lib';
 import {getSecrets} from 'api';
+import {TimeCach} from 'lib/time-cach';
+import {logger} from 'lib/logger';
 
 // Секреты из yandex lockbox
 export enum Secrets {

@@ -1,4 +1,5 @@
-import {Secrets, TimeCach, getSecret} from 'lib';
+import {Secrets, getSecret} from 'lib/get-secret';
+import {TimeCach} from 'lib/time-cach';
 
 export type McServersSharedData = {isWaitForStarting: boolean; lastTryTime: number};
 

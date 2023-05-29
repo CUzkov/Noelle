@@ -1,9 +1,12 @@
 import {Client} from 'discord.js';
 
 import {getMcServerStatus, getYcInstanceInfo} from 'api';
-import {Secrets, getSecret, logger, wait, getMcServerTimeLeftToRetryStart} from 'lib';
 import {editMessagesComponents, sendComponents, Components} from 'lib/components';
 import {getServerCard} from 'components/server-card';
+import {Secrets, getSecret} from 'lib/get-secret';
+import {getMcServerTimeLeftToRetryStart} from 'lib/mc-server';
+import {wait} from 'lib/wait';
+import {logger} from 'lib/logger';
 
 export const startUpdateStatusChannel = async (client: Client) => {
     while (true) {
