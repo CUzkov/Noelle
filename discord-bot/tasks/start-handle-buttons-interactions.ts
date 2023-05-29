@@ -34,8 +34,6 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 prefix: YC_INSTANCE_START_PREFIX,
             });
 
-            await startYcInstance(ycInstanceId);
-
             const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
             const config = ycInstanceConfig.find(
                 ({ycInstanceId: currYcInstanceId}) => currYcInstanceId === ycInstanceId,
@@ -46,6 +44,10 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 await interaction.update({});
                 return;
             }
+
+            await interaction.deferReply();
+
+            await startYcInstance(ycInstanceId);
 
             const {host, mcServerName, mcServerPort} = config;
             const {ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
@@ -62,7 +64,6 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             });
 
             await interaction.update({components: [buttons]});
-
             logger.info(`Instance ${ycInstanceId} starting`);
         }
 
@@ -78,8 +79,6 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            await stopYcInstance(ycInstanceId);
-
             const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
             const config = ycInstanceConfig.find(
                 ({ycInstanceId: currYcInstanceId}) => currYcInstanceId === ycInstanceId,
@@ -90,6 +89,10 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 await interaction.update({});
                 return;
             }
+
+            await interaction.deferReply();
+
+            await stopYcInstance(ycInstanceId);
 
             const {host, mcServerName, mcServerPort} = config;
             const {ycInstanceName} = await getYcInstanceInfo(ycInstanceId);
@@ -138,7 +141,9 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            execSshCommand({
+            await interaction.deferReply();
+
+            await execSshCommand({
                 command: mcStartConfig.startCommand,
                 config: {
                     host: mcStartConfig.host,
