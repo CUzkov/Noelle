@@ -45,7 +45,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            await interaction.deferReply();
+            await interaction.deferReply({ephemeral: true});
 
             await startYcInstance(ycInstanceId);
 
@@ -63,7 +63,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 mcServertimeLeftForRetryStart,
             });
 
-            await interaction.update({components: [buttons]});
+            await interaction.editReply({components: [buttons]});
             logger.info(`Instance ${ycInstanceId} starting`);
         }
 
@@ -90,7 +90,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            await interaction.deferReply();
+            await interaction.deferReply({ephemeral: true});
 
             await stopYcInstance(ycInstanceId);
 
@@ -108,7 +108,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 mcServertimeLeftForRetryStart,
             });
 
-            await interaction.update({components: [buttons]});
+            await interaction.editReply({components: [buttons]});
             logger.info(`Instance ${ycInstanceId} stopping`);
         }
 
@@ -141,7 +141,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 return;
             }
 
-            await interaction.deferReply();
+            await interaction.deferReply({ephemeral: true});
 
             await execSshCommand({
                 command: mcStartConfig.startCommand,
@@ -169,7 +169,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 mcServertimeLeftForRetryStart,
             });
 
-            await interaction.update({components: [buttons]});
+            await interaction.editReply({components: [buttons]});
 
             serverSharedData.set(mcServerName, {isWaitForStarting: true, lastTryTime: now}, FOUR_MINUT);
             logger.info(`Mc server ${mcStartConfig.mcServerName} starting`);
