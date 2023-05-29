@@ -45,7 +45,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             const buttons = getServerCardButtons({
                 ycInstanceId,
                 ycInstanceName: '',
-                ycInstanceStatus: YcInstanceStatus.provisioning,
+                ycInstanceStatus: YcInstanceStatus.starting,
                 mcServerName,
                 mcServerInfo: {
                     maxPlayers: 0,

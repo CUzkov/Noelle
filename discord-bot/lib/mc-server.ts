@@ -11,5 +11,7 @@ export const getMcServerTimeLeftToRetryStart = async ({mcServerName}: GetMcServe
         ? Math.round((new Date().getTime() - (mcServerSharedData?.lastTryTime ?? 0)) / 1000)
         : 0;
 
+    console.log('timeLeftForRetry', timeLeftForRetry);
+
     return timeLeftForRetry;
 };
