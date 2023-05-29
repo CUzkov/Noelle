@@ -1,95 +1,41 @@
 import React, {useEffect, FC} from 'react';
 import {Routes, Route} from 'react-router-dom';
-import {Container, Header, Sidebar, Sidenav, Content, Navbar, Nav, Button} from 'rsuite';
-
-import CogIcon from '@rsuite/icons/legacy/Cog';
-import AngleLeftIcon from '@rsuite/icons/legacy/AngleLeft';
-import AngleRightIcon from '@rsuite/icons/legacy/AngleRight';
-import GearCircleIcon from '@rsuite/icons/legacy/GearCircle';
-import DashboardIcon from '@rsuite/icons/Dashboard';
-import GroupIcon from '@rsuite/icons/legacy/Group';
-import MagicIcon from '@rsuite/icons/legacy/Magic';
-
-const NavToggle = ({expand, onChange}) => {
-    return (
-        <Navbar appearance="subtle" className="nav-toggle">
-            <Nav>
-                <Nav.Menu
-                    noCaret
-                    placement="topStart"
-                    trigger="click"
-                    title={<CogIcon style={{width: 20, height: 20}} />}
-                >
-                    <Nav.Item>Help</Nav.Item>
-                    <Nav.Item>Settings</Nav.Item>
-                    <Nav.Item>Sign out</Nav.Item>
-                </Nav.Menu>
-            </Nav>
-
-            <Nav pullRight>
-                <Nav.Item onClick={onChange} style={{width: 56, textAlign: 'center'}}>
-                    {expand ? <AngleLeftIcon /> : <AngleRightIcon />}
-                </Nav.Item>
-            </Nav>
-        </Navbar>
-    );
-};
+import {Grid, Menu, Segment, Button} from 'semantic-ui-react';
 
 export const App: FC = () => {
-    const expand = true;
+    const activeItem = 'bio';
 
     return (
-        <Container>
-            <Sidebar style={{display: 'flex', flexDirection: 'column'}} width={expand ? 260 : 56} collapsible>
-                <Sidenav expanded={expand} defaultOpenKeys={['3']} appearance="subtle">
-                    <Sidenav.Body>
-                        <Nav>
-                            <Nav.Item eventKey="1" active icon={<DashboardIcon />}>
-                                Dashboard
-                            </Nav.Item>
-                            <Nav.Item eventKey="2" icon={<GroupIcon />}>
-                                User Group
-                            </Nav.Item>
-                            <Nav.Menu
-                                eventKey="3"
-                                trigger="hover"
-                                title="Advanced"
-                                icon={<MagicIcon />}
-                                placement="rightStart"
-                            >
-                                <Nav.Item eventKey="3-1">Geo</Nav.Item>
-                                <Nav.Item eventKey="3-2">Devices</Nav.Item>
-                                <Nav.Item eventKey="3-3">Brand</Nav.Item>
-                                <Nav.Item eventKey="3-4">Loyalty</Nav.Item>
-                                <Nav.Item eventKey="3-5">Visit Depth</Nav.Item>
-                            </Nav.Menu>
-                            <Nav.Menu
-                                eventKey="4"
-                                trigger="hover"
-                                title="Settings"
-                                icon={<GearCircleIcon />}
-                                placement="rightStart"
-                            >
-                                <Nav.Item eventKey="4-1">Applications</Nav.Item>
-                                <Nav.Item eventKey="4-2">Websites</Nav.Item>
-                                <Nav.Item eventKey="4-3">Channels</Nav.Item>
-                                <Nav.Item eventKey="4-4">Tags</Nav.Item>
-                                <Nav.Item eventKey="4-5">Versions</Nav.Item>
-                            </Nav.Menu>
-                        </Nav>
-                    </Sidenav.Body>
-                </Sidenav>
-                {/* <NavToggle expand={expand} onChange={() => setExpand(!expand)} /> */}
-            </Sidebar>
+        <Grid>
+            <Grid.Column width={4}>
+                <Menu fluid vertical tabular>
+                    <Menu.Item
+                        name="bio"
+                        active={activeItem === 'bio'}
+                        //   onClick={this.handleItemClick}
+                    />
+                    <Menu.Item
+                        name="pics"
+                        //   active={activeItem === 'pics'}
+                        //   onClick={this.handleItemClick}
+                    />
+                    <Menu.Item
+                        name="companies"
+                        //   active={activeItem === 'companies'}
+                        //   onClick={this.handleItemClick}
+                    />
+                    <Menu.Item
+                        name="links"
+                        //   active={activeItem === 'links'}
+                        //   onClick={this.handleItemClick}
+                    />
+                </Menu>
+            </Grid.Column>
 
-            <Container>
-                <Header>
-                    <h2>Page Title</h2>
-                </Header>
-                <Content className={'content'}>
-                    <Button appearance="primary">Click</Button>
-                </Content>
-            </Container>
-        </Container>
+            <Grid.Column stretched width={12}>
+                <Segment>This is an stretched grid column. This segment will always match the tab height</Segment>
+                <Button primary>awd</Button>
+            </Grid.Column>
+        </Grid>
     );
 };

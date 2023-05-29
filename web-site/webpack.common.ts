@@ -20,7 +20,18 @@ const webpackCommon: Configuration = {
             },
             {
                 test: /\.less$/i,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'less-loader'],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'less-loader',
+                        options: {
+                            lessOptions: {
+                                'math': 'always',
+                            },
+                        },
+                    },
+                ],
             },
             {
                 test: /\.(woff|woff2|eot|ttf|otf)$/i,
@@ -30,6 +41,10 @@ const webpackCommon: Configuration = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
+        alias: {
+            '../../theme.config$': path.join(__dirname, 'src/semantic-ui/theme.config'),
+            '../semantic-ui/site': path.join(__dirname, 'src/semantic-ui/site'),
+        },
     },
     output: {
         filename: 'bundle.js',
