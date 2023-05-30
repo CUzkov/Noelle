@@ -7,8 +7,7 @@ import {ReactRouter6Adapter} from 'use-query-params/adapters/react-router-6';
 
 import {App} from './app';
 
-import 'semantic-ui-less/semantic.less';
-import './index.less';
+import styles from './index.sss';
 
 ReactDOM.render(
     <React.StrictMode>
@@ -16,6 +15,7 @@ ReactDOM.render(
             <QueryParamProvider adapter={ReactRouter6Adapter}>
                 {/* <Provider store={{}}> */}
                 <App />
+                <div className={styles.dd}></div>
                 {/* </Provider> */}
             </QueryParamProvider>
         </BrowserRouter>

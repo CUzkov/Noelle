@@ -87,6 +87,13 @@ export const getMcServerButton = ({
     }
 
     if (mcServerStatus === McServerStatus.intermediate) {
+        console.log(
+            mcServertimeLeftForRetryStart,
+            mcServertimeLeftForRetryStart > 0,
+            mcServertimeLeftForRetryStart > 0 ? `. TTReap ${mcServertimeLeftForRetryStart} сек.` : '',
+            `сервер ${mcServerName} запускается` +
+                (mcServertimeLeftForRetryStart > 0 ? `. TTReap ${mcServertimeLeftForRetryStart} сек.` : ''),
+        );
         return new ButtonBuilder()
             .setLabel(
                 `сервер ${mcServerName} запускается` +

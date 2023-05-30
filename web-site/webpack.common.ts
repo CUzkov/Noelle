@@ -19,18 +19,12 @@ const webpackCommon: Configuration = {
                 exclude: /node_modules/,
             },
             {
-                test: /\.less$/i,
+                test: /\.sss$/i,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    'css-loader',
-                    {
-                        loader: 'less-loader',
-                        options: {
-                            lessOptions: {
-                                'math': 'always',
-                            },
-                        },
-                    },
+                    {loader: 'css-modules-typescript-loader'},
+                    {loader: 'css-loader', options: {modules: {localIdentName: '[local]_[hash:base64:10]'}}},
+                    'postcss-loader',
                 ],
             },
             {
@@ -41,10 +35,6 @@ const webpackCommon: Configuration = {
     },
     resolve: {
         extensions: ['.tsx', '.ts', '.js'],
-        alias: {
-            '../../theme.config$': path.join(__dirname, 'src/semantic-ui/theme.config'),
-            '../semantic-ui/site': path.join(__dirname, 'src/semantic-ui/site'),
-        },
     },
     output: {
         filename: 'bundle.js',

@@ -1,0 +1,7 @@
+{
+    "parser": "sugarss",
+    "plugins": {
+        "autoprefixer": {},
+        "postcss-simple-vars": {}
+    }
+}
