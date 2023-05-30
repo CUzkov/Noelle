@@ -143,6 +143,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 },
             });
 
+            serverSharedData.set(mcServerName, {lastTryTime: now}, FOUR_MINUT);
             const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
 
             const buttons = getServerCardButtons({
@@ -160,8 +161,6 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             });
 
             await interaction.update({components: [buttons]});
-
-            serverSharedData.set(mcServerName, {isWaitForStarting: true, lastTryTime: now}, FOUR_MINUT);
             logger.info(`Mc server ${mcStartConfig.mcServerName} starting`);
         }
     });
