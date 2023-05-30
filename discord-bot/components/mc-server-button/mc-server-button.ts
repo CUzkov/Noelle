@@ -69,6 +69,8 @@ export const getMcServerButton = ({
     mcServertimeLeftForRetryStart,
 }: GetMCServerButtonParams) => {
     const mcServerStatus = mcServerInfo.status;
+    const imeLeftToRetryStartText =
+        mcServertimeLeftForRetryStart > 0 ? `. TTReap ${mcServertimeLeftForRetryStart} сек.` : '';
 
     if (ycInstanceStatus !== YcInstanceStatus.running) {
         return new ButtonBuilder()
@@ -87,18 +89,8 @@ export const getMcServerButton = ({
     }
 
     if (mcServerStatus === McServerStatus.intermediate) {
-        console.log(
-            mcServertimeLeftForRetryStart,
-            mcServertimeLeftForRetryStart > 0,
-            mcServertimeLeftForRetryStart > 0 ? `. TTReap ${mcServertimeLeftForRetryStart} сек.` : '',
-            `сервер ${mcServerName} запускается` +
-                (mcServertimeLeftForRetryStart > 0 ? `. TTReap ${mcServertimeLeftForRetryStart} сек.` : ''),
-        );
         return new ButtonBuilder()
-            .setLabel(
-                `сервер ${mcServerName} запускается` +
-                    (mcServertimeLeftForRetryStart > 0 ? `. TTReap ${mcServertimeLeftForRetryStart} сек.` : ''),
-            )
+            .setLabel(`сервер ${mcServerName} запускается${imeLeftToRetryStartText}`)
             .setCustomId(getMcCustomIdFromServerId({prefix: 'server-start-runnig', ycInstanceId, mcServerName}))
             .setStyle(ButtonStyle.Primary)
             .setDisabled(true);
@@ -106,7 +98,7 @@ export const getMcServerButton = ({
 
     if (mcServerStatus === McServerStatus.stop) {
         return new ButtonBuilder()
-            .setLabel(`запустить сервер ${mcServerName}`)
+            .setLabel(`запустить сервер ${mcServerName}${imeLeftToRetryStartText}`)
             .setCustomId(getMcCustomIdFromServerId({prefix: MC_SERVER_START_PREFIX, ycInstanceId, mcServerName}))
             .setStyle(ButtonStyle.Primary);
     }
