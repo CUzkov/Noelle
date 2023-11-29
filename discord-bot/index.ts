@@ -7,12 +7,12 @@ import {getMcServersSharedData} from 'lib/get-mc-servers-shared-data';
 
 process.on('unhandledRejection', async (reason) => {
     logger.error(reason);
-    process.exit();
+    process.exit(-1);
 });
 
 process.on('uncaughtException', async (err) => {
     logger.error({err}, 'Uncaught Exception');
-    process.exit();
+    process.exit(-1);
 });
 
 (async () => {
