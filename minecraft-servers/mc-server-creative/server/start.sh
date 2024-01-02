@@ -4,7 +4,7 @@
 # If everything is in order, the server is started.
 
 JAVA="java"
-MINECRAFT="1.20.0"
+MINECRAFT="1.20.4"
 ARGS=""
 OTHERARGS="-Dlog4j2.formatMsgNoLookups=true"
 
