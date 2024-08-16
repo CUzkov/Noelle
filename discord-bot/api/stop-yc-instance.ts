@@ -1,4 +1,5 @@
 import got from 'got';
+import pRetry, {AbortError} from 'p-retry';
 
 import {getIamToken} from 'lib/get-iam-token';
 import {logger} from 'lib/logger';
@@ -12,19 +13,25 @@ const getStopYcInstanceUrl = (instanceId: string) =>
     `https://compute.api.cloud.yandex.net/compute/v1/instances/${instanceId}:stop`;
 
 // Описаны только необходимые типы
-type StopYcInstanceResponse = {};
+interface FetchStopYcInstanceResponse {}
 
-export const stopYcInstance = async (instanceId: string) =>
-    await got
-        .post(getStopYcInstanceUrl(instanceId), {
-            headers: {
-                'Authorization': `Bearer ${await getIamToken()}`,
-            },
-            timeout: 10_000,
-        })
-        .json<StopYcInstanceResponse>()
-        .catch(async (e) => {
-            logger.fatal('Instance stops request was failed');
-            logger.fatal(e);
-            process.exit();
-        });
+export const fetchStopYcInstance = async (instanceId: string) => {
+    try {
+        await got
+            .post(getStopYcInstanceUrl(instanceId), {
+                headers: {
+                    'Authorization': `Bearer ${await getIamToken()}`,
+                },
+                timeout: 10_000,
+            })
+            .json<FetchStopYcInstanceResponse>();
+    } catch (error) {
+        logger.fatal(`Instance stop request was failed for ${instanceId}`);
+        throw new AbortError(error as Error);
+    }
+};
+
+export const stopYcInstance = async (instanceId: string) => {
+    const response = await pRetry(() => fetchStopYcInstance(instanceId), {retries: 5});
+    return response;
+};

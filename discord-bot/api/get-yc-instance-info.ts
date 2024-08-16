@@ -1,4 +1,5 @@
 import got from 'got';
+import pRetry, {AbortError} from 'p-retry';
 
 import {getIamToken} from 'lib/get-iam-token';
 import {logger} from 'lib/logger';
@@ -26,29 +27,39 @@ export enum YcInstanceStatus {
 }
 
 // Описаны только необходимые типы
-type GetYcInstanceInfoResponse = {
+interface GetYcInstanceInfoResponse {
     id: string;
     createdAt: string;
     name: string;
     description: string;
     status: YcInstanceStatus;
+}
+
+const fetchYcInstanceInfo = async (instanceId: string) => {
+    try {
+        const response = await got
+            .get(getGetYcInstanceInfoUrl(instanceId), {
+                headers: {
+                    'Authorization': `Bearer ${await getIamToken()}`,
+                },
+                timeout: 10_000,
+            })
+            .json<GetYcInstanceInfoResponse>()
+            .then(({name, status}) => {
+                logger.info('Instance info was successfully received');
+                return {
+                    ycInstanceName: name,
+                    ycInstanceStatus: status,
+                };
+            });
+        return response;
+    } catch (error) {
+        logger.fatal(`Instance info receive was failed for ${instanceId}`);
+        throw new AbortError(error as Error);
+    }
 };
 
-export const getYcInstanceInfo = async (instanceId: string) =>
-    await got
-        .get(getGetYcInstanceInfoUrl(instanceId), {
-            headers: {
-                'Authorization': `Bearer ${await getIamToken()}`,
-            },
-            timeout: 10_000,
-        })
-        .json<GetYcInstanceInfoResponse>()
-        .then(({name, status}) => ({
-            ycInstanceName: name,
-            ycInstanceStatus: status,
-        }))
-        .catch(async (e) => {
-            logger.fatal(`Instance info receive was failed for ${instanceId}`);
-            logger.fatal(e);
-            process.exit();
-        });
+export const getYcInstanceInfo = async (instanceId: string) => {
+    const response = await pRetry(() => fetchYcInstanceInfo(instanceId), {retries: 5});
+    return response;
+};
