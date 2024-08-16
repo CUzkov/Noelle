@@ -5,7 +5,8 @@ type GetMcServerStartRetryInfoParams = {
 };
 
 export const getMcServerTimeLeftToRetryStart = async ({mcServerName}: GetMcServerStartRetryInfoParams) => {
-    const mcServerSharedData = (await getMcServersSharedData()).get(mcServerName);
+    const mcServersSharedData = await getMcServersSharedData();
+    const mcServerSharedData = mcServersSharedData?.get(mcServerName);
 
     const timeLeftForRetry = mcServerSharedData
         ? Math.round((new Date().getTime() - mcServerSharedData.lastTryTime) / 1000)

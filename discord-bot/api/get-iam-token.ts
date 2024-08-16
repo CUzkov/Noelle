@@ -1,5 +1,4 @@
 import got from 'got';
-import pRetry, {AbortError} from 'p-retry';
 
 import {logger} from 'lib/logger';
 
@@ -10,13 +9,13 @@ import {logger} from 'lib/logger';
 
 const IAM_TOKEN_REFRESH_URL = 'http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token';
 
-interface FetchIamTokenResponse {
+interface GetIamTokenResponse {
     access_token: string;
     expires_in: number;
     token_type: string;
 }
 
-const fetchIamToken = async () => {
+export const getIamToken = async () => {
     try {
         const response = await got
             .get(IAM_TOKEN_REFRESH_URL, {
@@ -24,8 +23,11 @@ const fetchIamToken = async () => {
                     'Metadata-Flavor': 'Google',
                 },
                 timeout: 10_000,
+                retry: {
+                    limit: 10,
+                },
             })
-            .json<FetchIamTokenResponse>()
+            .json<GetIamTokenResponse>()
             .then((res) => {
                 logger.info('IAM token was successfully received');
                 return res;
@@ -33,11 +35,5 @@ const fetchIamToken = async () => {
         return response;
     } catch (error) {
         logger.fatal('IAM token receive was failed');
-        throw new AbortError(error as Error);
     }
-};
-
-export const getIamToken = async () => {
-    const response = await pRetry(() => fetchIamToken(), {retries: 5});
-    return response;
 };

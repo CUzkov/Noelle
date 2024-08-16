@@ -1,5 +1,4 @@
 import got from 'got';
-import pRetry, {AbortError} from 'p-retry';
 
 import {getIamToken} from 'lib/get-iam-token';
 import {logger} from 'lib/logger';
@@ -35,7 +34,7 @@ interface GetYcInstanceInfoResponse {
     status: YcInstanceStatus;
 }
 
-const fetchYcInstanceInfo = async (instanceId: string) => {
+export const getYcInstanceInfo = async (instanceId: string) => {
     try {
         const response = await got
             .get(getGetYcInstanceInfoUrl(instanceId), {
@@ -43,6 +42,9 @@ const fetchYcInstanceInfo = async (instanceId: string) => {
                     'Authorization': `Bearer ${await getIamToken()}`,
                 },
                 timeout: 10_000,
+                retry: {
+                    limit: 10,
+                },
             })
             .json<GetYcInstanceInfoResponse>()
             .then(({name, status}) => {
@@ -55,11 +57,5 @@ const fetchYcInstanceInfo = async (instanceId: string) => {
         return response;
     } catch (error) {
         logger.fatal(`Instance info receive was failed for ${instanceId}`);
-        throw new AbortError(error as Error);
     }
-};
-
-export const getYcInstanceInfo = async (instanceId: string) => {
-    const response = await pRetry(() => fetchYcInstanceInfo(instanceId), {retries: 5});
-    return response;
 };

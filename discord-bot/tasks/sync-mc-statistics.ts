@@ -13,13 +13,18 @@ export const syncMcStatistics = async () => {
 
         const config = await getSecret(Secrets.ycInstanceConfig);
 
+        if (!config) {
+            logger.error('config is undefined');
+            continue;
+        }
+
         for (let i = 0; i < config.length; i++) {
             const {mcServerStatsPath, host, login, mcServerName, privateKey, ycInstanceId} = config[i];
             const localpath = getMcServerStatsPath({mcServerName});
 
-            const {ycInstanceStatus} = await getYcInstanceInfo(ycInstanceId);
+            const {ycInstanceStatus} = (await getYcInstanceInfo(ycInstanceId)) || {};
 
-            if (ycInstanceStatus !== YcInstanceStatus.running) {
+            if (!ycInstanceStatus || ycInstanceStatus !== YcInstanceStatus.running) {
                 continue;
             }
 

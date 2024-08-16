@@ -43,11 +43,11 @@ const secretsCach = new TimeCach<Config>({
 
 const FIVE_MINUTS = 5 * 60 * 1_000;
 
-export const getSecret = async <T extends Secrets>(secret: T): Promise<Config[T]> => {
+export const getSecret = async <T extends Secrets>(secret: T): Promise<Config[T] | undefined> => {
     let cachSecret = secretsCach.get(secret);
 
     if (!cachSecret) {
-        (await getSecrets()).entries.forEach(({key, textValue, binaryValue}) => {
+        (await getSecrets())?.entries.forEach(({key, textValue, binaryValue}) => {
             if (!textValue && !binaryValue) {
                 return;
             }
@@ -70,11 +70,6 @@ export const getSecret = async <T extends Secrets>(secret: T): Promise<Config[T]
     }
 
     cachSecret = secretsCach.get(secret);
-
-    if (!cachSecret) {
-        logger.fatal(`Cannot fetch ${secret} secret`);
-        process.exit();
-    }
 
     return cachSecret;
 };

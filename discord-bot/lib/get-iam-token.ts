@@ -17,7 +17,7 @@ export const getIamToken = async () => {
     let iam = iamCach.get('iam');
 
     if (!iam) {
-        iam = (await getIamTokenApi()).access_token;
+        iam = (await getIamTokenApi())?.access_token || '';
         iamCach.set('iam', iam, HOUR);
     }
 

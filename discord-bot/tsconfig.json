@@ -1,15 +1,6 @@
 {
+    "extends": "@tsconfig/node18/tsconfig.json",
     "compilerOptions": {
-        "noEmit": true,
-        "target": "es2018",
-        "skipLibCheck": true,
-        "allowSyntheticDefaultImports": true,
-        "module": "commonjs",
-        "strict": true,
-        "moduleResolution": "node",
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "jsx": "react",
         "baseUrl": "./"
     },
     "ts-node": {

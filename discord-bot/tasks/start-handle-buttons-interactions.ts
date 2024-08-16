@@ -28,7 +28,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             });
 
             const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
-            const config = ycInstanceConfig.find(
+            const config = ycInstanceConfig?.find(
                 ({ycInstanceId: currYcInstanceId}) => currYcInstanceId === ycInstanceId,
             );
 
@@ -66,14 +66,14 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 prefix: YC_INSTANCE_STOP_PREFIX,
             });
 
-            if ((await getYcInstanceInfo(ycInstanceId)).ycInstanceStatus !== YcInstanceStatus.running) {
+            if ((await getYcInstanceInfo(ycInstanceId))?.ycInstanceStatus !== YcInstanceStatus.running) {
                 logger.error(`Yc instance ${ycInstanceId} not running`);
                 await interaction.update({});
                 return;
             }
 
             const ycInstanceConfig = await getSecret(Secrets.ycInstanceConfig);
-            const config = ycInstanceConfig.find(
+            const config = ycInstanceConfig?.find(
                 ({ycInstanceId: currYcInstanceId}) => currYcInstanceId === ycInstanceId,
             );
 
@@ -113,18 +113,18 @@ export const startHandleButtonsInteractions = async (client: Client) => {
             });
             const serverSharedData = await getMcServersSharedData();
 
-            if (serverSharedData.get(mcServerName)) {
+            if (serverSharedData?.get(mcServerName)) {
                 await interaction.update({});
                 return;
             }
 
-            if ((await getYcInstanceInfo(ycInstanceId)).ycInstanceStatus !== YcInstanceStatus.running) {
+            if ((await getYcInstanceInfo(ycInstanceId))?.ycInstanceStatus !== YcInstanceStatus.running) {
                 logger.error(`Yc instance ${ycInstanceId} not started`);
                 await interaction.update({});
                 return;
             }
 
-            const mcStartConfig = (await getSecret(Secrets.ycInstanceConfig)).find(
+            const mcStartConfig = (await getSecret(Secrets.ycInstanceConfig))?.find(
                 ({ycInstanceId: currYcInstanceId}) => currYcInstanceId === ycInstanceId,
             );
 
@@ -143,7 +143,7 @@ export const startHandleButtonsInteractions = async (client: Client) => {
                 },
             });
 
-            serverSharedData.set(mcServerName, {lastTryTime: now}, FOUR_MINUT);
+            serverSharedData?.set(mcServerName, {lastTryTime: now}, FOUR_MINUT);
             const mcServertimeLeftForRetryStart = await getMcServerTimeLeftToRetryStart({mcServerName});
 
             const buttons = getServerCardButtons({
