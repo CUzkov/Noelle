@@ -4,13 +4,13 @@
 # If everything is in order, the server is started.
 
 JAVA="java"
-MINECRAFT="1.20.4"
+MINECRAFT="1.21.1"
 ARGS=""
 OTHERARGS="-Dlog4j2.formatMsgNoLookups=true"
 
 if [[ ! -s "server.jar" ]];then
   echo "Minecraft Server JAR-file not found. Downloading...";
-  curl https://piston-data.mojang.com/v1/objects/8dd1a28015f51b1803213892b50b7b4fc76e594d/server.jar --output server.jar ;
+  curl https://piston-data.mojang.com/v1/objects/59353fb40c36d304f2035d51e7d6e6baa98dc05c/server.jar --output server.jar ;
 else
   echo "server.jar present. Moving on...";
 fi
