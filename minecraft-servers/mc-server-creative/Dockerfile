@@ -1,4 +1,4 @@
-FROM openjdk:18-oracle
+FROM openjdk:21-oracle
 
 COPY ./server /usr/src/server
 WORKDIR /usr/src/server
