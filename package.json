@@ -1,12 +1,14 @@
 {
   "name": "Noelle",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Minecraft server control plane and Discord bot",
+  "private": true,
+  "packageManager": "pnpm@8.15.9",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "check:bot": "corepack pnpm --filter noelle exec tsc --noEmit",
+    "check:web": "corepack pnpm --filter mc-statistics exec tsc --noEmit && corepack pnpm --filter mc-statistics run build",
+    "check": "corepack pnpm run check:bot && corepack pnpm run check:web",
+    "deploy": "./scripts/deploy.sh"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC"
 }

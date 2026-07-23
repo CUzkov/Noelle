@@ -1,11 +1,15 @@
 FROM node:18 as build-stage
 
-RUN mkdir /app
-ADD . /app
-WORKDIR /app/web-site
+WORKDIR /app
+RUN npm install -g pnpm@8.15.9
 
-RUN npm install -g pnpm
-RUN pnpm i
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY discord-bot/package.json ./discord-bot/package.json
+COPY web-site/package.json ./web-site/package.json
+RUN pnpm install --frozen-lockfile
+
+COPY . .
+WORKDIR /app/web-site
 RUN pnpm run build
 RUN mkdir /app/build
 RUN mv ./build/* /app/build

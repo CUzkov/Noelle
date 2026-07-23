@@ -6,12 +6,7 @@ services:
             context: ./
             dockerfile: ./discord-bot/Dockerfile
         network_mode: host
-        deploy:
-            restart_policy:
-                condition: on-failure
-                delay: 5s
-                max_attempts: 5
-                window: 60s
+        restart: unless-stopped
         volumes:
             - /home/cuzkov/mc-servers-stats:/mc-server-statistics
 
@@ -20,9 +15,4 @@ services:
             context: ./
             dockerfile: ./web-site/Dockerfile
         network_mode: host
-        deploy:
-            restart_policy:
-                condition: on-failure
-                delay: 5s
-                max_attempts: 5
-                window: 60s
+        restart: unless-stopped
