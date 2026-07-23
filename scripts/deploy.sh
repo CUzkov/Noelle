@@ -16,6 +16,11 @@ for command_name in "${required_commands[@]}"; do
     fi
 done
 
+# Package scripts invoke `pnpm` directly. Prefer the pnpm shim installed next
+# to Corepack over a potentially stale user-level shim earlier in PATH.
+corepack_bin_dir="$(dirname -- "$(command -v corepack)")"
+export PATH="$corepack_bin_dir:$PATH"
+
 if [[ ! -f "$NOELLE_DEPLOY_KEY" ]]; then
     echo "SSH key not found: $NOELLE_DEPLOY_KEY" >&2
     exit 1
@@ -49,7 +54,7 @@ echo "==> Installing locked dependencies"
 CI=true corepack pnpm install --frozen-lockfile
 
 echo "==> Running pre-deploy checks"
-corepack pnpm run check
+CI=true pnpm_config_verify_deps_before_run=false corepack pnpm run check
 
 echo "==> Syncing project to $target:$NOELLE_DEPLOY_PATH"
 rsync \
