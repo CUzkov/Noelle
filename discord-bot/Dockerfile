@@ -1,7 +1,7 @@
-FROM node:18
+FROM node:24.18.0
 
 WORKDIR /app
-RUN npm install -g pnpm@8.15.9
+RUN npm install -g pnpm@11.16.0
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY discord-bot/package.json ./discord-bot/package.json

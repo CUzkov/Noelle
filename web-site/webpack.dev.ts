@@ -1,8 +1,8 @@
 import type {Configuration as DevServerConfiguration} from 'webpack-dev-server';
-import {Configuration} from 'webpack';
+import type {Configuration} from 'webpack';
 import {merge} from 'webpack-merge';
 
-import common from './webpack.common';
+import common from './webpack.common.ts';
 
 const devServer: DevServerConfiguration = {
     client: {

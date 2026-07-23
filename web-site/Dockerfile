@@ -1,7 +1,7 @@
-FROM node:18 as build-stage
+FROM node:24.18.0 AS build-stage
 
 WORKDIR /app
-RUN npm install -g pnpm@8.15.9
+RUN npm install -g pnpm@11.16.0
 
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY discord-bot/package.json ./discord-bot/package.json
@@ -14,7 +14,7 @@ RUN pnpm run build
 RUN mkdir /app/build
 RUN mv ./build/* /app/build
 
-FROM nginx:1.19.6
+FROM nginx:1.30.3
 
 RUN rm -rf /usr/share/nginx/html/*
 

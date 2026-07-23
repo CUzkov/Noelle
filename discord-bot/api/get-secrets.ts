@@ -1,8 +1,7 @@
-import got from 'got';
-
 import {Secrets} from 'lib/get-secret';
 import {getIamToken} from 'lib/get-iam-token';
 import {logger} from 'lib/logger';
+import {requestJson} from './request-json';
 
 /**
  * Описание ручки в документации
@@ -19,18 +18,13 @@ interface GetSecretsResponse {
 
 export const getSecrets = async () => {
     try {
-        const response = await got
-            .get(GET_SECRET_URL, {
-                headers: {
-                    'Authorization': `Bearer ${await getIamToken()}`,
-                },
-                timeout: 10_000,
-            })
-            .json<GetSecretsResponse>()
-            .then((res) => {
-                logger.info('Config secret was successfully received');
-                return res;
-            });
+        const response = await requestJson<GetSecretsResponse>(GET_SECRET_URL, {
+            headers: {
+                'Authorization': `Bearer ${await getIamToken()}`,
+            },
+            retryLimit: 2,
+        });
+        logger.info('Config secret was successfully received');
         return response;
     } catch (error) {
         logger.fatal('Config secret receive was failed');

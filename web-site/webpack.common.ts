@@ -1,7 +1,10 @@
 import path from 'path';
-import {Configuration} from 'webpack';
+import {fileURLToPath} from 'url';
+import type {Configuration} from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const webpackCommon: Configuration = {
     entry: './src/index.tsx',
@@ -22,8 +25,10 @@ const webpackCommon: Configuration = {
                 test: /\.sss$/i,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    {loader: 'css-modules-typescript-loader'},
-                    {loader: 'css-loader', options: {modules: {localIdentName: '[local]_[hash:base64:10]'}}},
+                    {
+                        loader: 'css-loader',
+                        options: {modules: {localIdentName: '[local]_[hash:base64:10]', namedExport: false}},
+                    },
                     'postcss-loader',
                 ],
             },
@@ -38,7 +43,7 @@ const webpackCommon: Configuration = {
     },
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(dirname, 'build'),
         clean: true,
     },
 };

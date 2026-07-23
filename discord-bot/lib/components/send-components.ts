@@ -1,10 +1,10 @@
 import {ActionRowBuilder, EmbedBuilder} from '@discordjs/builders';
-import {TextBasedChannel} from 'discord.js';
+import {SendableChannels} from 'discord.js';
 
 import {Components} from './types';
 
 type SendComponentsParams = {
-    channel: TextBasedChannel;
+    channel: SendableChannels;
     components: Components[];
 };
 
@@ -14,7 +14,7 @@ export const sendComponents = async ({channel, components}: SendComponentsParams
             await channel.send({embeds: [component]});
         }
 
-        if (component instanceof ActionRowBuilder<any>) {
+        if (component instanceof ActionRowBuilder) {
             await channel.send({components: [component]});
         }
     });

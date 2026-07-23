@@ -1,7 +1,6 @@
-import got from 'got';
-
 import {getIamToken} from 'lib/get-iam-token';
 import {logger} from 'lib/logger';
+import {requestJson} from './request-json';
 
 /**
  * Описание ручки в документации
@@ -16,17 +15,12 @@ interface StartYcInstanceResponse {}
 
 export const startYcInstance = async (instanceId: string) => {
     try {
-        await got
-            .post(getStartYcInstanceUrl(instanceId), {
-                headers: {
-                    'Authorization': `Bearer ${await getIamToken()}`,
-                },
-                timeout: 10_000,
-                retry: {
-                    limit: 10,
-                },
-            })
-            .json<StartYcInstanceResponse>();
+        await requestJson<StartYcInstanceResponse>(getStartYcInstanceUrl(instanceId), {
+            headers: {
+                'Authorization': `Bearer ${await getIamToken()}`,
+            },
+            method: 'POST',
+        });
     } catch (error) {
         logger.fatal(`Instance start request was failed for ${instanceId}`);
     }

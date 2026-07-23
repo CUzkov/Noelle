@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "description": "Minecraft server control plane and Discord bot",
   "private": true,
-  "packageManager": "pnpm@8.15.9",
+  "packageManager": "pnpm@11.16.0",
   "scripts": {
-    "check:bot": "corepack pnpm --filter noelle exec tsc --noEmit",
-    "check:web": "corepack pnpm --filter mc-statistics exec tsc --noEmit && corepack pnpm --filter mc-statistics run build",
-    "check": "corepack pnpm run check:bot && corepack pnpm run check:web",
+    "check:bot": "pnpm --filter noelle exec tsc --noEmit",
+    "check:web": "pnpm --filter mc-statistics exec tsc --noEmit && pnpm --filter mc-statistics exec tsc --noEmit --project tsconfig.webpack.json && pnpm --filter mc-statistics run build",
+    "check": "pnpm run check:bot && pnpm run check:web",
     "deploy": "./scripts/deploy.sh"
   },
   "license": "ISC"

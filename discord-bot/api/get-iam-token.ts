@@ -1,6 +1,5 @@
-import got from 'got';
-
 import {logger} from 'lib/logger';
+import {requestJson} from './request-json';
 
 /**
  * Описание ручки в документации
@@ -17,21 +16,12 @@ interface GetIamTokenResponse {
 
 export const getIamToken = async () => {
     try {
-        const response = await got
-            .get(IAM_TOKEN_REFRESH_URL, {
-                headers: {
-                    'Metadata-Flavor': 'Google',
-                },
-                timeout: 10_000,
-                retry: {
-                    limit: 10,
-                },
-            })
-            .json<GetIamTokenResponse>()
-            .then((res) => {
-                logger.info('IAM token was successfully received');
-                return res;
-            });
+        const response = await requestJson<GetIamTokenResponse>(IAM_TOKEN_REFRESH_URL, {
+            headers: {
+                'Metadata-Flavor': 'Google',
+            },
+        });
+        logger.info('IAM token was successfully received');
         return response;
     } catch (error) {
         logger.fatal('IAM token receive was failed');

@@ -1,8 +1,5 @@
-import React, {useEffect, FC} from 'react';
-import {Routes, Route} from 'react-router-dom';
+import {FC} from 'react';
 
 export const App: FC = () => {
-    const activeItem = 'bio';
-
     return <div>awd</div>;
 };

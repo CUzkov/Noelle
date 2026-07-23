@@ -1,7 +1,7 @@
-import {Configuration, Module} from 'webpack';
+import type {Configuration, Module} from 'webpack';
 import {merge} from 'webpack-merge';
 
-import common from './webpack.common';
+import common from './webpack.common.ts';
 
 const webpackDev: Configuration = {
     mode: 'production',
@@ -27,9 +27,9 @@ const webpackDev: Configuration = {
         },
     },
     output: {
-        filename: '[name].[hash:8].js',
-        sourceMapFilename: '[name].[hash:8].map',
-        chunkFilename: '[id].[hash:8].js',
+        filename: '[name].[fullhash:8].js',
+        sourceMapFilename: '[name].[fullhash:8].map',
+        chunkFilename: '[id].[fullhash:8].js',
     },
 };
 

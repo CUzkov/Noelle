@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
+import {createRoot} from 'react-dom/client';
 import {BrowserRouter} from 'react-router-dom';
 import {QueryParamProvider} from 'use-query-params';
 import {ReactRouter6Adapter} from 'use-query-params/adapters/react-router-6';
@@ -9,16 +8,19 @@ import {App} from './app';
 
 import styles from './index.sss';
 
-ReactDOM.render(
+const rootElement = document.getElementById('root');
+
+if (!rootElement) {
+    throw new Error('Root element was not found');
+}
+
+createRoot(rootElement).render(
     <React.StrictMode>
         <BrowserRouter>
             <QueryParamProvider adapter={ReactRouter6Adapter}>
-                {/* <Provider store={{}}> */}
                 <App />
                 <div className={styles.dd}></div>
-                {/* </Provider> */}
             </QueryParamProvider>
         </BrowserRouter>
     </React.StrictMode>,
-    document.getElementById('root'),
 );

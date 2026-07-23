@@ -56,8 +56,8 @@ export const startUpdateStatusChannel = async (client: Client) => {
 
             const channel = client.channels.cache.get(discordStatusChannelId);
 
-            if (!channel || !channel.isTextBased()) {
-                logger.error('Given status channel does not exist or is not text based');
+            if (!channel || !channel.isTextBased() || !channel.isSendable()) {
+                logger.error('Given status channel does not exist or is not sendable');
                 continue;
             }
 

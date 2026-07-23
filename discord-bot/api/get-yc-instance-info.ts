@@ -1,7 +1,6 @@
-import got from 'got';
-
 import {getIamToken} from 'lib/get-iam-token';
 import {logger} from 'lib/logger';
+import {requestJson} from './request-json';
 
 /**
  * Описание ручки в документации
@@ -36,25 +35,16 @@ interface GetYcInstanceInfoResponse {
 
 export const getYcInstanceInfo = async (instanceId: string) => {
     try {
-        const response = await got
-            .get(getGetYcInstanceInfoUrl(instanceId), {
-                headers: {
-                    'Authorization': `Bearer ${await getIamToken()}`,
-                },
-                timeout: 10_000,
-                retry: {
-                    limit: 10,
-                },
-            })
-            .json<GetYcInstanceInfoResponse>()
-            .then(({name, status}) => {
-                logger.info('Instance info was successfully received');
-                return {
-                    ycInstanceName: name,
-                    ycInstanceStatus: status,
-                };
-            });
-        return response;
+        const {name, status} = await requestJson<GetYcInstanceInfoResponse>(getGetYcInstanceInfoUrl(instanceId), {
+            headers: {
+                'Authorization': `Bearer ${await getIamToken()}`,
+            },
+        });
+        logger.info('Instance info was successfully received');
+        return {
+            ycInstanceName: name,
+            ycInstanceStatus: status,
+        };
     } catch (error) {
         logger.fatal(`Instance info receive was failed for ${instanceId}`);
     }

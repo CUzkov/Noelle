@@ -1,0 +1,8 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "allowImportingTsExtensions": true,
+        "noEmit": true
+    },
+    "include": ["webpack.dev.ts", "webpack.prod.ts", "webpack.common.ts"]
+}
