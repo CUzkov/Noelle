@@ -64,6 +64,7 @@ rsync \
     --human-readable \
     --exclude=.git/ \
     --exclude=node_modules/ \
+    --exclude=.pnpm-store/ \
     --exclude=.DS_Store \
     -e "ssh -o BatchMode=yes -o ConnectTimeout=12 -i $NOELLE_DEPLOY_KEY" \
     ./ \
